@@ -1,5 +1,5 @@
 {
-  "name": "task1",
+  "name": "airport",
   "version": "1.0.0",
   "scripts": {
     "build": "webpack --mode=production",
