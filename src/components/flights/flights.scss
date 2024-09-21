@@ -1,0 +1,21 @@
+.main-search {
+  background: url(https://iev.aero/images/main.jpg) no-repeat bottom;
+  background-size: cover;
+  color: #fff;
+  -webkit-box-shadow: 0 10px 15px rgba(0, 0, 0, 0.38);
+  box-shadow: 0 10px 15px rgba(0, 0, 0, 0.38);
+  position: relative;
+  overflow: hidden;
+  width: 100%;
+  height: 400px;
+
+  &__title {
+    text-transform: uppercase;
+    text-align: center;
+    position: relative;
+    z-index: 1;
+
+    font-size: 70px;
+    color: #fff;
+  }
+}
