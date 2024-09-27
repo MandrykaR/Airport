@@ -1,8 +1,14 @@
 import React from 'react';
-import Flights from './components/flights/Flights';
+import AirportHeader from './components/headerAirport/AirportHeader';
+import BoardAir from './components/boardAir/BoardAir';
 
 const App = () => {
-  return <Flights />;
+  return (
+    <>
+      <AirportHeader />
+      <BoardAir />
+    </>
+  );
 };
 
 export default App;

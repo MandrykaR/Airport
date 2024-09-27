@@ -1,8 +1,46 @@
 * {
+  margin: 0;
+  padding: 0;
   box-sizing: border-box;
 }
 
 body {
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: Open Sans, sans-serif;
   text-align: center;
+}
+
+ul,
+ol {
+  list-style: none;
+}
+
+input,
+button,
+textarea,
+select {
+  font: inherit;
+  outline: none;
+  border: none;
+}
+
+table {
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+
+button {
+  background-color: transparent;
+  cursor: pointer;
+  border: none;
+  padding: 0;
+}
+
+html {
+  box-sizing: border-box;
+}
+
+main {
+  background-color: #e6e6e6;
+  flex: 1 1 auto;
+  padding: 132px 0 50px;
 }

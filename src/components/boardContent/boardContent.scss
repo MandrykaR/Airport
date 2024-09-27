@@ -1,0 +1,46 @@
+.board__content {
+  background-color: #fff;
+  border-radius: 60px 60px 0 0;
+  overflow: hidden;
+  width: 1120px;
+  height: 480px;
+  margin: 0 auto;
+}
+
+
+// fix button
+.filter {
+  min-height: 140px;
+  &__buttons-wrapper {
+    position: relative;
+  }
+  &__button_current {
+    background-color: #fff;
+  }
+
+  &__button {
+    color: #1eb7ee;
+    background-color: #73d2f0;
+    border: none;
+    border-radius: 0 60px 0 0;
+    color: #fff;
+    cursor: pointer;
+    font-family: Open Sans, sans-serif;
+    font-size: 24px;
+    font-weight: 600;
+    height: 60px;
+    padding: 0 135px 0 0;
+    position: absolute;
+    text-align: end;
+    top: 0;
+    transition: 0.3s ease-in-out;
+    width: 55%;
+  }
+
+  &__button:last-child {
+    border-radius: 60px 0 0 0;
+    padding: 0 0 0 180px;
+    right: 0;
+    text-align: start;
+  }
+}

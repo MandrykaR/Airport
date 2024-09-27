@@ -1,4 +1,36 @@
-.search-input {
+.search {
+  margin: 0 auto 40px;
+  width: 720px;
 
+  &__title {
+    font-size: 70px;
+    font-weight: 300;
+    margin-bottom: 25px;
+  }
+
+  &__input {
+    border: none;
+    font-size: 24px;
+    height: 70px;
+    outline: none;
+    padding: 0 20px 0 70px;
+    width: 520px;
+  }
+
+  &__button {
+    background-color: #1eb7ee;
+    border: none;
+    border-top-right-radius: 80px;
+    color: #fff;
+    cursor: pointer;
+    font-family: Open Sans, sans-serif;
+    font-size: 26px;
+    font-weight: 700;
+    height: 70px;
+    padding: 0 20px;
+    position: relative;
+    text-align: left;
+    transition: 0.3s ease-in-out;
+    width: 200px;
+  }
 }
-

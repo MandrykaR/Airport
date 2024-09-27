@@ -1,0 +1,38 @@
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  background-color: #1eb7ee;
+  box-shadow: 0 6px 12px 0 #0000004d;
+  min-height: 92px;
+  padding-left: 120px;
+  position: fixed;
+  z-index: 1000;
+
+  &__logo {
+    display: inline-block;
+    img {
+      width: 100%;
+      max-width: 181px;
+      height: auto;
+      display: block;
+    }
+  }
+
+  &__links {
+    display: flex;
+  }
+
+  &__link a {
+    color: #fff;
+    font-size: 20px;
+    padding: 0 35px;
+    text-decoration: none;
+  }
+
+  &__link:last-child > a {
+    font-size: 22px;
+    font-weight: 700;
+  }
+}

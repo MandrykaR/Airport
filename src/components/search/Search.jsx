@@ -3,16 +3,20 @@ import './search.scss';
 
 const Search = () => {
   return (
-    <form>
-      <input
-        type="text"
-        className="search-input"
-        placeholder="Airline, destination or flight#"
-      />
-      <button className="btn-search" type="submit">
-        Search
-      </button>
-    </form>
+    <div className="search">
+      <h2 className="search__title">FLIGHT SEARCH</h2>
+      <div className="search__wrapper">
+        <form>
+          <input
+            className="search__input"
+            type="search"
+            placeholder="Flight № ..."
+            value=""
+          />
+          <input type="submit" class="search__button" value="SEARCH" />
+        </form>
+      </div>
+    </div>
   );
 };
 
