@@ -6,8 +6,8 @@ const BoardContent = ({ flights }) => {
     <div className="board__content">
       <div className="filter">
         <div className="filter__buttons-wrapper">
-          <button className="filter__button ">DEPARTURES</button>
-          <button className="filter__button ">ARRIVALS</button>
+          <button className="filter__button">DEPARTURES</button>
+          <button className="filter__button">ARRIVALS</button>
         </div>
 
         <div className="filter__date-wrapper">
@@ -56,7 +56,7 @@ const BoardContent = ({ flights }) => {
                 <br />
                 From: {flight.departureCity} | To: {flight.arrivalCity}
                 <br />
-                Expected Departure:{' '}
+                Expected Departure:
                 {new Date(flight.departureDateExpected).toLocaleString()}
               </li>
             ))}
