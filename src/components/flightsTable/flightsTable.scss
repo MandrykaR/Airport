@@ -1,0 +1,59 @@
+$background-color: #f0f8ff;
+$border-color: #ddd;
+$table-header-bg: #0094fa;
+$header-text-color: white;
+$even-row-bg: #cdefff;
+$terminal-green: #00b300;
+$terminal-red: #ff1a1a;
+
+.table {
+  width: 100%;
+  padding: 20px;
+  background-color: $background-color;
+
+  .flights-table {
+    width: 100%;
+    border-collapse: collapse;
+
+    th,
+    td {
+      padding: 10px 20px;
+      text-align: left;
+      border: 1px solid $border-color;
+      background-color: lighten($background-color, 10%);
+
+      img {
+        vertical-align: middle;
+        width: 50px;
+        height: 30px;
+        margin-right: 10px;
+      }
+    }
+
+    th {
+      background-color: $table-header-bg;
+      color: $header-text-color;
+    }
+    tr:nth-child(even) {
+      background-color: $even-row-bg;
+    }
+
+    .terminal {
+      display: inline-block;
+      padding: 5px 10px;
+      border-radius: 50%;
+      color: white;
+      font-weight: bold;
+
+      &.A {
+        background-color: $terminal-green;
+        border: 2px solid $terminal-green;
+      }
+
+      &.C {
+        background-color: $terminal-red;
+        border: 2px solid $terminal-red;
+      }
+    }
+  }
+}

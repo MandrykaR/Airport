@@ -5,6 +5,7 @@ import { useDispatch, useSelector } from 'react-redux';
 
 const Search = ({ setFilteredFlights }) => {
   const [searchTerm, setSearchTerm] = useState('');
+  const [initialFlights, setInitialFlights] = useState([]);
 
   const dispatch = useDispatch();
   const flights = useSelector((state) => state.flights.data);
@@ -16,7 +17,19 @@ const Search = ({ setFilteredFlights }) => {
 
   useEffect(() => {
     if (loadingStatus === 'succeeded') {
-      const filtered = flights.filter((flight) => {
+      setFilteredFlights(flights);
+      setInitialFlights(flights);
+    }
+  }, [flights, loadingStatus, setFilteredFlights]);
+
+  const handleInputChange = (e) => {
+    setSearchTerm(e.target.value);
+  };
+
+  const handleSearch = (e) => {
+    e.preventDefault();
+    if (loadingStatus === 'succeeded') {
+      const filtered = initialFlights.filter((flight) => {
         return (
           (flight.departureCity?.toLowerCase() || '').includes(
             searchTerm.toLowerCase()
@@ -31,17 +44,8 @@ const Search = ({ setFilteredFlights }) => {
             .includes(searchTerm.toLowerCase())
         );
       });
-
       setFilteredFlights(filtered);
     }
-  }, [flights, searchTerm, loadingStatus, setFilteredFlights]);
-
-  const handleInputChange = (e) => {
-    setSearchTerm(e.target.value);
-  };
-
-  const handleSearch = (e) => {
-    e.preventDefault();
   };
 
   return (

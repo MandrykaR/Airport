@@ -1,13 +1,40 @@
-import React from 'react';
+import React, { useState } from 'react';
+import FlightsTable from '../flightsTable/FlightsTable';
 import './boardContent.scss';
 
 const BoardContent = ({ flights }) => {
+  const [filteredStatus, setFilteredStatus] = useState('departures');
+
+  const handleChangeStatus = (type) => {
+    setFilteredStatus(type);
+  };
+
+  const filteredFlights = flights.filter((flight) => {
+    return filteredStatus === 'departures'
+      ? flight.type === 'DEPARTURE'
+      : flight.type === 'ARRIVAL';
+  });
+
   return (
     <div className="board__content">
       <div className="filter">
         <div className="filter__buttons-wrapper">
-          <button className="filter__button">DEPARTURES</button>
-          <button className="filter__button">ARRIVALS</button>
+          <button
+            className={`filter__button ${
+              filteredStatus === 'departures' ? 'filter__button_current' : ''
+            }`}
+            onClick={() => handleChangeStatus('departures')}
+          >
+            DEPARTURES
+          </button>
+          <button
+            className={`filter__button ${
+              filteredStatus === 'arrivals' ? 'filter__button_current' : ''
+            }`}
+            onClick={() => handleChangeStatus('arrivals')}
+          >
+            ARRIVALS
+          </button>
         </div>
 
         <div className="filter__date-wrapper">
@@ -23,7 +50,6 @@ const BoardContent = ({ flights }) => {
             />
           </label>
 
-          {/*convert to a component */}
           <div className="filter__date-buttons">
             <div className="filter__date-button filter__date-button_current">
               <p>26/09</p>
@@ -40,31 +66,7 @@ const BoardContent = ({ flights }) => {
           </div>
         </div>
       </div>
-
-      <div className="table">
-        {flights.length > 0 ? (
-          <ul>
-            {flights.map((flight) => (
-              <li key={flight.id}>
-                <img
-                  src={flight.airlineLogo}
-                  alt={flight.airlineName}
-                  width="50"
-                  height="50"
-                />
-                Flight: {flight.codeShare} | Airline: {flight.airlineName}
-                <br />
-                From: {flight.departureCity} | To: {flight.arrivalCity}
-                <br />
-                Expected Departure:
-                {new Date(flight.departureDateExpected).toLocaleString()}
-              </li>
-            ))}
-          </ul>
-        ) : (
-          <h5 className="table__null">No Flights</h5>
-        )}
-      </div>
+      <FlightsTable filteredFlights={filteredFlights} />
     </div>
   );
 };
