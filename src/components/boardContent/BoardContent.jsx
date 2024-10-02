@@ -4,15 +4,26 @@ import './boardContent.scss';
 
 const BoardContent = ({ flights }) => {
   const [filteredStatus, setFilteredStatus] = useState('departures');
+  const [selectedDate, setSelectedDate] = useState(new Date());
 
   const handleChangeStatus = (type) => {
     setFilteredStatus(type);
   };
 
+  const handleDateChange = (e) => {
+    setSelectedDate(new Date(e.target.value));
+  };
+
+  const cutoffDate = new Date('2022-02-23');
+
   const filteredFlights = flights.filter((flight) => {
+    const flightDate = new Date(flight.departureDateExpected);
+
     return filteredStatus === 'departures'
       ? flight.type === 'DEPARTURE'
-      : flight.type === 'ARRIVAL';
+      : flight.type === 'ARRIVAL' &&
+          flightDate <= selectedDate &&
+          selectedDate <= cutoffDate;
   });
 
   return (
@@ -42,11 +53,13 @@ const BoardContent = ({ flights }) => {
             htmlFor="filter-date-input"
             className="filter__date-input-label"
           >
-            <p>26/09</p>
+            <p>{selectedDate.toLocaleDateString()}</p>
             <input
               type="date"
               className="filter__date-input"
               id="filter-date-input"
+              value={selectedDate.toISOString().split('T')[0]}
+              onChange={handleDateChange}
             />
           </label>
 
@@ -66,7 +79,13 @@ const BoardContent = ({ flights }) => {
           </div>
         </div>
       </div>
-      <FlightsTable filteredFlights={filteredFlights} />
+      {selectedDate > cutoffDate ? (
+        <h5 className="table__null">
+          No flights
+        </h5>
+      ) : (
+        <FlightsTable filteredFlights={filteredFlights} />
+      )}
     </div>
   );
 };
