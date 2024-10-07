@@ -5,6 +5,9 @@ import './boardContent.scss';
 const BoardContent = ({ flights }) => {
   const [filteredStatus, setFilteredStatus] = useState('departures');
   const [selectedDate, setSelectedDate] = useState(new Date());
+  const [activeButton, setActiveButton] = useState(0);
+
+  const cutoffDate = new Date('2022-02-23');
 
   const handleChangeStatus = (type) => {
     setFilteredStatus(type);
@@ -14,16 +17,33 @@ const BoardContent = ({ flights }) => {
     setSelectedDate(new Date(e.target.value));
   };
 
-  const cutoffDate = new Date('2022-02-23');
+  const handleDateButtonClick = (days) => {
+    const newDate = new Date(selectedDate);
+    newDate.setDate(selectedDate.getDate() + days);
+    setSelectedDate(newDate);
+    setActiveButton(days);
+  };
+
+  const getFormattedDate = (offsetDays) => {
+    const date = new Date(selectedDate);
+    date.setDate(date.getDate() + offsetDays);
+    return date.toLocaleDateString();
+  };
 
   const filteredFlights = flights.filter((flight) => {
     const flightDate = new Date(flight.departureDateExpected);
 
-    return filteredStatus === 'departures'
-      ? flight.type === 'DEPARTURE'
-      : flight.type === 'ARRIVAL' &&
-          flightDate <= selectedDate &&
-          selectedDate <= cutoffDate;
+    if (filteredStatus === 'departures') {
+      return flight.type === 'DEPARTURE' && flightDate <= selectedDate;
+    } else if (filteredStatus === 'arrivals') {
+      return (
+        flight.type === 'ARRIVAL' &&
+        flightDate <= selectedDate &&
+        flightDate <= cutoffDate
+      );
+    }
+
+    return false;
   });
 
   return (
@@ -48,6 +68,7 @@ const BoardContent = ({ flights }) => {
           </button>
         </div>
 
+        {/* component */}
         <div className="filter__date-wrapper">
           <label
             htmlFor="filter-date-input"
@@ -64,25 +85,38 @@ const BoardContent = ({ flights }) => {
           </label>
 
           <div className="filter__date-buttons">
-            <div className="filter__date-button filter__date-button_current">
-              <p>26/09</p>
+            <button
+              onClick={() => handleDateButtonClick(-1)}
+              className={`filter__date-button ${
+                activeButton === -1 ? 'filter__date-button_current' : ''
+              }`}
+            >
+              <p>{getFormattedDate(-1)}</p>
               <p>YESTERDAY</p>
-            </div>
-            <div className="filter__date-button">
-              <p>27/09</p>
+            </button>
+            <button
+              onClick={() => handleDateButtonClick(0)}
+              className={`filter__date-button ${
+                activeButton === 0 ? 'filter__date-button_current' : ''
+              }`}
+            >
+              <p>{getFormattedDate(0)}</p>
               <p>TODAY</p>
-            </div>
-            <div className="filter__date-button">
-              <p>28/09</p>
+            </button>
+            <button
+              onClick={() => handleDateButtonClick(+1)}
+              className={`filter__date-button ${
+                activeButton === 1 ? 'filter__date-button_current' : ''
+              }`}
+            >
+              <p>{getFormattedDate(+1)}</p>
               <p>TOMORROW</p>
-            </div>
+            </button>
           </div>
         </div>
       </div>
       {selectedDate > cutoffDate ? (
-        <h5 className="table__null">
-          No flights
-        </h5>
+        <h5 className="table__null">No flights</h5>
       ) : (
         <FlightsTable filteredFlights={filteredFlights} />
       )}
