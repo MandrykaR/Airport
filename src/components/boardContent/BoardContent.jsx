@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import FlightsTable from '../flightsTable/FlightsTable';
+import DateSelector from '../dateSelector/DateSelector';
 import './boardContent.scss';
 
 const BoardContent = ({ flights }) => {
@@ -68,52 +69,13 @@ const BoardContent = ({ flights }) => {
           </button>
         </div>
 
-        {/* component */}
-        <div className="filter__date-wrapper">
-          <label
-            htmlFor="filter-date-input"
-            className="filter__date-input-label"
-          >
-            <p>{selectedDate.toLocaleDateString()}</p>
-            <input
-              type="date"
-              className="filter__date-input"
-              id="filter-date-input"
-              value={selectedDate.toISOString().split('T')[0]}
-              onChange={handleDateChange}
-            />
-          </label>
-
-          <div className="filter__date-buttons">
-            <button
-              onClick={() => handleDateButtonClick(-1)}
-              className={`filter__date-button ${
-                activeButton === -1 ? 'filter__date-button_current' : ''
-              }`}
-            >
-              <p>{getFormattedDate(-1)}</p>
-              <p>YESTERDAY</p>
-            </button>
-            <button
-              onClick={() => handleDateButtonClick(0)}
-              className={`filter__date-button ${
-                activeButton === 0 ? 'filter__date-button_current' : ''
-              }`}
-            >
-              <p>{getFormattedDate(0)}</p>
-              <p>TODAY</p>
-            </button>
-            <button
-              onClick={() => handleDateButtonClick(+1)}
-              className={`filter__date-button ${
-                activeButton === 1 ? 'filter__date-button_current' : ''
-              }`}
-            >
-              <p>{getFormattedDate(+1)}</p>
-              <p>TOMORROW</p>
-            </button>
-          </div>
-        </div>
+        <DateSelector
+          selectedDate={selectedDate}
+          handleDateChange={handleDateChange}
+          handleDateButtonClick={handleDateButtonClick}
+          getFormattedDate={getFormattedDate}
+          activeButton={activeButton}
+        />
       </div>
       {selectedDate > cutoffDate ? (
         <h5 className="table__null">No flights</h5>
