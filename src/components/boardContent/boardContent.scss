@@ -9,6 +9,7 @@
 
 .filter {
   min-height: 140px;
+
   &__buttons-wrapper {
     position: relative;
     display: flex;
@@ -16,11 +17,9 @@
   }
 
   &__button {
-    color: #1eb7ee;
     background-color: #151616;
     border: none;
     border-radius: 0 60px 0 0;
-    color: #fff;
     cursor: pointer;
     font-family: Open Sans, sans-serif;
     font-size: 24px;
@@ -32,31 +31,36 @@
     top: 0;
     transition: 0.3s ease-in-out;
     width: 55%;
-  }
+    color: #fff;
 
-  &__button:before {
-    background: url(https://www.pngkey.com/png/full/138-1382606_icon-airplane-icon-blue-png.png)
-      no-repeat 50%;
-    background-size: contain;
-    content: '';
-    display: block;
-    filter: brightness(500%);
-    height: 30px;
-    left: 285px;
-    position: absolute;
-    top: 16px;
-    width: 30px;
-  }
+    &::before {
+      background: url(https://www.pngkey.com/png/full/138-1382606_icon-airplane-icon-blue-png.png)
+        no-repeat 50%;
+      background-size: contain;
+      content: '';
+      display: block;
+      height: 30px;
+      left: 285px;
+      position: absolute;
+      top: 16px;
+      width: 30px;
+      transition: filter 0.3s ease;
+      filter: brightness(0%) invert(100%);
+    }
 
-  &__button:last-child:before {
-    left: 130px;
-    transform: rotate(90deg);
+    &:last-child::before {
+      left: 130px;
+      transform: rotate(90deg);
+    }
   }
 
   &__button_current {
-    color: #1eb7ee;
     background-color: #fff;
-    font-size: 24px;
+    color: #1eb7ee;
+
+    &::before {
+      filter: brightness(0) saturate(100%);
+    }
   }
 
   &__button:last-child {

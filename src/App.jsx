@@ -11,8 +11,17 @@ const App = () => {
       <Router>
         <AirportHeader />
         <Routes>
-          <Route path="/flights" element={<BoardAir />} />
-          <Route path="/flights/:type" element={<BoardAir />} />
+          <Route path="/" element={<BoardAir />} />
+          <Route path="/arrivals" element={<BoardAir type="arrivals" />} />
+          <Route path="/departures" element={<BoardAir type="departures" />} />
+          <Route
+            path="/arrivals/:date"
+            element={<BoardAir type="arrivals" />}
+          />
+          <Route
+            path="/departures/:date"
+            element={<BoardAir type="departures" />}
+          />
         </Routes>
       </Router>
     </Provider>
