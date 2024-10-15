@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { fetchFlights } from '../../flightsSlice';
 import './search.scss';
 import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate, useLocation } from 'react-router-dom';
 
 const Search = ({ setFilteredFlights }) => {
   const [searchTerm, setSearchTerm] = useState('');
@@ -10,6 +11,9 @@ const Search = ({ setFilteredFlights }) => {
   const dispatch = useDispatch();
   const flights = useSelector((state) => state.flights.data);
   const loadingStatus = useSelector((state) => state.flights.loadingStatus);
+
+  const location = useLocation();
+  const navigate = useNavigate();
 
   useEffect(() => {
     dispatch(fetchFlights());
@@ -23,7 +27,16 @@ const Search = ({ setFilteredFlights }) => {
   }, [flights, loadingStatus, setFilteredFlights]);
 
   const handleInputChange = (e) => {
-    setSearchTerm(e.target.value);
+    const newSearchTerm = e.target.value;
+    setSearchTerm(newSearchTerm);
+
+    const params = new URLSearchParams(location.search);
+    if (newSearchTerm) {
+      params.set('search', newSearchTerm);
+    } else {
+      params.delete('search');
+    }
+    navigate({ search: params.toString() });
   };
 
   const handleSearch = (e) => {
