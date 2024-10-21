@@ -16,13 +16,11 @@ const BoardContent = ({ flights, type: propType, date: propDate }) => {
   const queryType = searchParams.get('type') || propType || 'departures';
   const queryDate =
     searchParams.get('date') ||
-    (propDate
-      ? propDate
-      : new Date().toLocaleDateString().split('/').join('-'));
+    (propDate ? propDate : new Date().toISOString().split('T')[0]);
 
   useEffect(() => {
     if (queryDate) {
-      setSelectedDate(new Date(queryDate.split('-').join('-')));
+      setSelectedDate(new Date(queryDate));
     }
   }, [queryDate]);
 
@@ -31,7 +29,7 @@ const BoardContent = ({ flights, type: propType, date: propDate }) => {
     setSelectedDate(newDate);
     setSearchParams({
       type: queryType,
-      date: newDate.toLocaleDateString().split('/').join('-'),
+      date: newDate.toISOString().split('T')[0],
     });
   };
 
@@ -42,7 +40,7 @@ const BoardContent = ({ flights, type: propType, date: propDate }) => {
     setActiveButton(days);
     setSearchParams({
       type: queryType,
-      date: newDate.toLocaleDateString().split('/').join('-'),
+      date: newDate.toISOString().split('T')[0],
     });
   };
 
@@ -79,7 +77,7 @@ const BoardContent = ({ flights, type: propType, date: propDate }) => {
             onClick={() =>
               setSearchParams({
                 type: 'departures',
-                date: selectedDate.toLocaleDateString().split('/').join('-'),
+                date: selectedDate.toISOString().split('T')[0],
               })
             }
           >
