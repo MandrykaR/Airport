@@ -47,7 +47,7 @@ const BoardContent = ({ flights, type: propType, date: propDate }) => {
   const getFormattedDate = (offsetDays) => {
     const date = new Date(selectedDate);
     date.setDate(date.getDate() + offsetDays);
-    return date.toLocaleDateString();
+    return date.toISOString().split('T')[0];
   };
 
   const filteredFlights = flights.filter((flight) => {
@@ -90,7 +90,7 @@ const BoardContent = ({ flights, type: propType, date: propDate }) => {
             onClick={() =>
               setSearchParams({
                 type: 'arrivals',
-                date: selectedDate.toLocaleDateString().split('/').join('-'),
+                date: selectedDate.toISOString().split('T')[0],
               })
             }
           >
