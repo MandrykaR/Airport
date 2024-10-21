@@ -17,7 +17,6 @@
 - [Webpack](https://webpack.js.org/)
 - [Babel](https://babeljs.io/)
 
-[Netify](https://lambent-queijadas-3fb68a.netlify.app)
 
 ### Development Setup
 
