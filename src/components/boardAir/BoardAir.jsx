@@ -1,24 +1,28 @@
 import React, { useEffect, useState } from 'react';
 import Search from '../search/Search';
 import BoardContent from '../boardContent/BoardContent';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useSearchParams } from 'react-router-dom';
 
 const BoardAir = ({ type }) => {
   const [filteredFlights, setFilteredFlights] = useState([]);
-  const navigate = useNavigate();
-  const { date } = useParams();
+  const [searchParams, setSearchParams] = useSearchParams();
+
+  const queryType = searchParams.get('type') || 'arrivals';
+  const date =
+    searchParams.get('date') ||
+    new Date().toLocaleDateString().split('/').join('-');
 
   useEffect(() => {
-    if (!type) {
-      navigate('/arrivals');
+    if (!searchParams.get('type')) {
+      setSearchParams({ type: 'arrivals', date });
     }
-  }, [type, navigate]);
+  }, [searchParams, setSearchParams, date, type]);
 
   return (
     <main>
       <div className="container">
         <Search setFilteredFlights={setFilteredFlights} />
-        <BoardContent flights={filteredFlights} type={type} date={date} />
+        <BoardContent flights={filteredFlights} type={queryType} date={date} />
       </div>
     </main>
   );

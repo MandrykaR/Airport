@@ -1,29 +1,38 @@
 import React, { useEffect, useState } from 'react';
 import FlightsTable from '../flightsTable/FlightsTable';
 import DateSelector from '../dateSelector/DateSelector';
-import { useNavigate } from 'react-router-dom';
+import { useSearchParams } from 'react-router-dom';
 
 import './boardContent.scss';
 
-const BoardContent = ({ flights, type, date }) => {
-  const navigate = useNavigate();
-  const [selectedDate, setSelectedDate] = useState(
-    date ? new Date(date) : new Date()
-  );
+const BoardContent = ({ flights, type: propType, date: propDate }) => {
+  const [searchParams, setSearchParams] = useSearchParams();
   const [activeButton, setActiveButton] = useState(0);
-
+  const [selectedDate, setSelectedDate] = useState(
+    propDate ? new Date(propDate) : new Date()
+  );
   const cutoffDate = new Date('2022-02-23');
 
+  const queryType = searchParams.get('type') || propType || 'departures';
+  const queryDate =
+    searchParams.get('date') ||
+    (propDate
+      ? propDate
+      : new Date().toLocaleDateString().split('/').join('-'));
+
   useEffect(() => {
-    if (date) {
-      setSelectedDate(new Date(date.split('-').join('-')));
+    if (queryDate) {
+      setSelectedDate(new Date(queryDate.split('-').join('-')));
     }
-  }, [date]);
+  }, [queryDate]);
 
   const handleDateChange = (e) => {
     const newDate = new Date(e.target.value);
     setSelectedDate(newDate);
-    navigate(`/${type}/${newDate.toLocaleDateString().split('/').join('-')}`);
+    setSearchParams({
+      type: queryType,
+      date: newDate.toLocaleDateString().split('/').join('-'),
+    });
   };
 
   const handleDateButtonClick = (days) => {
@@ -31,7 +40,10 @@ const BoardContent = ({ flights, type, date }) => {
     newDate.setDate(selectedDate.getDate() + days);
     setSelectedDate(newDate);
     setActiveButton(days);
-    navigate(`/${type}/${newDate.toLocaleDateString().split('/').join('-')}`);
+    setSearchParams({
+      type: queryType,
+      date: newDate.toLocaleDateString().split('/').join('-'),
+    });
   };
 
   const getFormattedDate = (offsetDays) => {
@@ -43,9 +55,9 @@ const BoardContent = ({ flights, type, date }) => {
   const filteredFlights = flights.filter((flight) => {
     const flightDate = new Date(flight.departureDateExpected);
 
-    if (type === 'departures') {
+    if (queryType === 'departures') {
       return flight.type === 'DEPARTURE' && flightDate <= selectedDate;
-    } else if (type === 'arrivals') {
+    } else if (queryType === 'arrivals') {
       return (
         flight.type === 'ARRIVAL' &&
         flightDate <= selectedDate &&
@@ -62,17 +74,27 @@ const BoardContent = ({ flights, type, date }) => {
         <div className="filter__buttons-wrapper">
           <button
             className={`filter__button ${
-              type === 'departures' ? 'filter__button_current' : ''
+              queryType === 'departures' ? 'filter__button_current' : ''
             }`}
-            onClick={() => navigate('/departures')}
+            onClick={() =>
+              setSearchParams({
+                type: 'departures',
+                date: selectedDate.toLocaleDateString().split('/').join('-'),
+              })
+            }
           >
             DEPARTURES
           </button>
           <button
             className={`filter__button ${
-              type === 'arrivals' ? 'filter__button_current' : ''
+              queryType === 'arrivals' ? 'filter__button_current' : ''
             }`}
-            onClick={() => navigate('/arrivals')}
+            onClick={() =>
+              setSearchParams({
+                type: 'arrivals',
+                date: selectedDate.toLocaleDateString().split('/').join('-'),
+              })
+            }
           >
             ARRIVALS
           </button>
