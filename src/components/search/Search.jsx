@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { fetchFlights } from '../../flightsSlice';
+import { fetchFlights } from '../../redux/flightsSlice';
 import './search.scss';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, useLocation } from 'react-router-dom';

@@ -3,7 +3,7 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import AirportHeader from './components/headerAirport/AirportHeader';
 import BoardAir from './components/boardAir/BoardAir';
 import { Provider } from 'react-redux';
-import store from './store';
+import store from './redux/store';
 
 const App = () => {
   return (
