@@ -33,7 +33,7 @@ const Search = ({ setFilteredFlights }) => {
     const params = new URLSearchParams(location.search);
     if (newSearchTerm) {
       params.set('search', newSearchTerm);
-    } else {  
+    } else {
       params.delete('search');
     }
     navigate({ search: params.toString() });

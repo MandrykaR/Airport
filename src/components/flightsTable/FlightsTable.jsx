@@ -46,7 +46,9 @@ const FlightsTable = ({ filteredFlights }) => {
           </tbody>
         </table>
       ) : (
-        <h5 className="table__null">No Flights</h5>
+        <div className="filter__title">
+          <h5 className="filter__message filter__message--null">No flights</h5>
+        </div>
       )}
     </div>
   );

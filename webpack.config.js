@@ -22,6 +22,11 @@ module.exports = (_, argv) => {
           use: ['babel-loader'],
         },
         {
+          test: /\.(png|jpe?g|gif|svg)$/i,
+          type: 'asset/resource',
+          use: 'file-loader',
+        },
+        {
           test: /.s?css$/,
           use: [
             isProduction ? MiniCssExtractPlugin.loader : 'style-loader',

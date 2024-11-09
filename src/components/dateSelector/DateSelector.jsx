@@ -1,4 +1,5 @@
 import React from 'react';
+import './dateSelector.scss';
 
 const DateSelector = ({
   selectedDate,
@@ -10,7 +11,7 @@ const DateSelector = ({
   return (
     <div className="filter__date-wrapper">
       <label htmlFor="filter-date-input" className="filter__date-input-label">
-        <p>{selectedDate.toLocaleDateString()}</p>
+        <p>{getFormattedDate(0)}</p>
         <input
           type="date"
           className="filter__date-input"

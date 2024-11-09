@@ -34,10 +34,17 @@ const BoardContent = ({ flights, type: propType, date: propDate }) => {
   };
 
   const handleDateButtonClick = (days) => {
-    const newDate = new Date(selectedDate);
-    newDate.setDate(selectedDate.getDate() + days);
+    let newDate;
+
+    if (days === 0) {
+      newDate = new Date();
+    } else {
+      newDate = new Date(selectedDate);
+      newDate.setDate(selectedDate.getDate() + days);
+    }
     setSelectedDate(newDate);
     setActiveButton(days);
+
     setSearchParams({
       type: queryType,
       date: newDate.toISOString().split('T')[0],
@@ -47,7 +54,11 @@ const BoardContent = ({ flights, type: propType, date: propDate }) => {
   const getFormattedDate = (offsetDays) => {
     const date = new Date(selectedDate);
     date.setDate(date.getDate() + offsetDays);
-    return date.toISOString().split('T')[0];
+
+    const day = String(date.getDate()).padStart(2, '0');
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+
+    return `${day}/${month}`;
   };
 
   const filteredFlights = flights.filter((flight) => {
@@ -107,7 +118,9 @@ const BoardContent = ({ flights, type: propType, date: propDate }) => {
         />
       </div>
       {selectedDate > cutoffDate ? (
-        <h5 className="table__null">No flights</h5>
+        <div className="filter__title">
+          <h5 className="filter__message filter__message--null">No flights</h5>
+        </div>
       ) : (
         <FlightsTable filteredFlights={filteredFlights} />
       )}

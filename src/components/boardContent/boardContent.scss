@@ -17,7 +17,7 @@
   }
 
   &__button {
-    background-color: #151616;
+    background-color: #05b8ff;
     border: none;
     border-radius: 0 60px 0 0;
     cursor: pointer;
@@ -59,7 +59,8 @@
     color: #1eb7ee;
 
     &::before {
-      filter: brightness(0) saturate(100%);
+      filter: brightness(0) saturate(100%) invert(54%) sepia(95%)
+        saturate(1000%) hue-rotate(185deg) brightness(100%);
     }
   }
 
@@ -72,8 +73,8 @@
 
   &__date-wrapper {
     display: flex;
-    height: 140px;
-    padding: 85px 20px 0;
+    height: 130px;
+    padding: 77px 20px 0;
     width: 1200px;
   }
 
@@ -81,17 +82,17 @@
     margin-right: 30px;
   }
 
-  &__date-input {
-    background-position: 44% 47%;
-    background-repeat: no-repeat;
-    background-size: 120px 120px;
-    border: none;
-    border-radius: 5px;
-    font-size: 40px;
-    height: 40px;
-    outline: none;
-    width: 40px;
-  }
+  // &__date-input {
+  //   background-position: 44% 47%;
+  //   background-repeat: no-repeat;
+  //   background-size: 120px 120px;
+  //   border: none;
+  //   border-radius: 5px;
+  //   font-size: 40px;
+  //   height: 40px;
+  //   outline: none;
+  //   width: 40px;
+  // }
 
   &__date-buttons {
     display: flex;
@@ -111,5 +112,16 @@
   &__date-button_current {
     border-bottom: 3px solid #1eb7ee;
     color: #1eb7ee;
+  }
+
+  &__title {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 300px;
+  }
+
+  &__message {
+    font-size: 30px;
   }
 }
