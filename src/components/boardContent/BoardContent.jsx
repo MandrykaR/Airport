@@ -28,10 +28,10 @@ const BoardContent = ({ flights, type: propType, date: propDate }) => {
     const dateValue = e.target.value;
 
     if (!dateValue) {
-      setSelectedDate(null);
+      setSelectedDate(new Date());
       setSearchParams({
         type: queryType,
-        date: '',
+        date: new Date().toISOString().split('T')[0],
       });
       return;
     }
@@ -108,10 +108,12 @@ const BoardContent = ({ flights, type: propType, date: propDate }) => {
               queryType === 'departures' ? 'filter__button_current' : ''
             }`}
             onClick={() =>
-              setSearchParams({
-                type: 'departures',
-                date: selectedDate.toISOString().split('T')[0],
-              })
+              selectedDate
+                ? setSearchParams({
+                    type: 'departures',
+                    date: selectedDate.toISOString().split('T')[0],
+                  })
+                : console.error('Selected date is null')
             }
           >
             DEPARTURES
@@ -121,10 +123,12 @@ const BoardContent = ({ flights, type: propType, date: propDate }) => {
               queryType === 'arrivals' ? 'filter__button_current' : ''
             }`}
             onClick={() =>
-              setSearchParams({
-                type: 'arrivals',
-                date: selectedDate.toISOString().split('T')[0],
-              })
+              selectedDate
+                ? setSearchParams({
+                    type: 'arrivals',
+                    date: selectedDate.toISOString().split('T')[0],
+                  })
+                : console.error('Selected date is null')
             }
           >
             ARRIVALS
