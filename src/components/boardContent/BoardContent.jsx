@@ -25,7 +25,23 @@ const BoardContent = ({ flights, type: propType, date: propDate }) => {
   }, [queryDate]);
 
   const handleDateChange = (e) => {
-    const newDate = new Date(e.target.value);
+    const dateValue = e.target.value;
+
+    if (!dateValue) {
+      setSelectedDate(null);
+      setSearchParams({
+        type: queryType,
+        date: '',
+      });
+      return;
+    }
+
+    const newDate = new Date(dateValue);
+    if (isNaN(newDate)) {
+      console.error('Invalid date value:', dateValue);
+      return;
+    }
+
     setSelectedDate(newDate);
     setSearchParams({
       type: queryType,
@@ -40,8 +56,14 @@ const BoardContent = ({ flights, type: propType, date: propDate }) => {
       newDate = new Date();
     } else {
       newDate = new Date(selectedDate);
-      newDate.setDate(selectedDate.getDate() + days);
+      newDate.setDate(newDate.getDate() + days);
     }
+
+    if (isNaN(newDate)) {
+      console.error('Invalid date after button click:', newDate);
+      return;
+    }
+
     setSelectedDate(newDate);
     setActiveButton(days);
 

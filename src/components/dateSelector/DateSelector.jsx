@@ -8,6 +8,9 @@ const DateSelector = ({
   getFormattedDate,
   activeButton,
 }) => {
+  const formattedDate = selectedDate
+    ? selectedDate.toISOString().split('T')[0]
+    : '';
   return (
     <div className="filter__date-wrapper">
       <label htmlFor="filter-date-input" className="filter__date-input-label">
@@ -16,7 +19,7 @@ const DateSelector = ({
           type="date"
           className="filter__date-input"
           id="filter-date-input"
-          value={selectedDate.toISOString().split('T')[0]}
+          value={formattedDate}
           onChange={handleDateChange}
         />
       </label>
