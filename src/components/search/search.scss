@@ -37,4 +37,8 @@
     transition: 0.3s ease-in-out;
     width: 200px;
   }
+
+  &__input::-webkit-search-cancel-button {
+    cursor: pointer;
+  }
 }
