@@ -1,6 +1,6 @@
 # Airport in React
 
-### [Site link](https://lambent-queijadas-3fb68a.netlify.app/?type=arrivals&date=11-21-2024)
+### [Site link](https://lambent-queijadas-3fb68a.netlify.app/)
 
 ### The tech stack is:
 
