@@ -7,20 +7,24 @@ import './boardContent.scss';
 
 const BoardContent = ({ flights, type: propType, date: propDate }) => {
   const [searchParams, setSearchParams] = useSearchParams();
-  const [activeButton, setActiveButton] = useState(0);
-  const [selectedDate, setSelectedDate] = useState(
-    propDate ? new Date(propDate) : new Date()
-  );
-  const cutoffDate = new Date('2022-02-23');
+
+  const todayDate = new Date();
+  const defaultDate = todayDate.toISOString().split('T')[0];
 
   const queryType = searchParams.get('type') || propType || 'departures';
-  const queryDate =
-    searchParams.get('date') ||
-    (propDate ? propDate : new Date().toISOString().split('T')[0]);
+  const queryDate = searchParams.get('date') || propDate || defaultDate;
+
+  const [selectedDate, setSelectedDate] = useState(() => {
+    const parsedDate = new Date(queryDate);
+    return isNaN(parsedDate) ? todayDate : parsedDate;
+  });
 
   useEffect(() => {
     if (queryDate) {
-      setSelectedDate(new Date(queryDate));
+      const parsedDate = new Date(queryDate);
+      if (!isNaN(parsedDate)) {
+        setSelectedDate(parsedDate);
+      }
     }
   }, [queryDate]);
 
@@ -31,7 +35,7 @@ const BoardContent = ({ flights, type: propType, date: propDate }) => {
       setSelectedDate(new Date());
       setSearchParams({
         type: queryType,
-        date: new Date().toISOString().split('T')[0],
+        date: defaultDate,
       });
       return;
     }
@@ -85,6 +89,10 @@ const BoardContent = ({ flights, type: propType, date: propDate }) => {
 
   const filteredFlights = flights.filter((flight) => {
     const flightDate = new Date(flight.departureDateExpected);
+    if (isNaN(flightDate)) {
+      console.error('Invalid flight date:', flight.departureDateExpected);
+      return false;
+    }
 
     if (queryType === 'departures') {
       return flight.type === 'DEPARTURE' && flightDate <= selectedDate;

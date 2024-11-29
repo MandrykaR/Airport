@@ -8,15 +8,16 @@ const BoardAir = ({ type }) => {
   const [searchParams, setSearchParams] = useSearchParams();
 
   const queryType = searchParams.get('type') || 'arrivals';
-  const date =
-    searchParams.get('date') ||
-    new Date().toLocaleDateString().split('/').join('-');
+  const todayDate = new Date();
+  const defaultDate = todayDate.toISOString().split('T')[0]; // YYYY-MM-DD
+
+  const date = searchParams.get('date') || defaultDate;
 
   useEffect(() => {
-    if (!searchParams.get('type')) {
-      setSearchParams({ type: 'arrivals', date });
+    if (!searchParams.get('type') || !searchParams.get('date')) {
+      setSearchParams({ type: 'arrivals', date: defaultDate });
     }
-  }, [searchParams, setSearchParams, date, type]);
+  }, [searchParams, setSearchParams, defaultDate]);
 
   return (
     <main>
