@@ -7,7 +7,8 @@ import './boardContent.scss';
 
 const BoardContent = ({ flights, type: propType, date: propDate }) => {
   const [searchParams, setSearchParams] = useSearchParams();
-
+  const [activeButton, setActiveButton] = useState(0);
+  const cutoffDate = new Date('2022-02-23');
   const todayDate = new Date();
   const defaultDate = todayDate.toISOString().split('T')[0];
 
