@@ -1,4 +1,6 @@
 import React from 'react';
+import moment from 'moment';
+
 import './dateSelector.scss';
 
 const DateSelector = ({
@@ -9,12 +11,13 @@ const DateSelector = ({
   activeButton,
 }) => {
   const formattedDate = selectedDate
-    ? selectedDate.toISOString().split('T')[0]
+    ? moment(selectedDate).format('YYYY-MM-DD')
     : '';
+
   return (
     <div className="filter__date-wrapper">
       <label htmlFor="filter-date-input" className="filter__date-input-label">
-        <p>{getFormattedDate(0)}</p>
+        <p>{formattedDate}</p>
         <input
           type="date"
           className="filter__date-input"
@@ -44,12 +47,12 @@ const DateSelector = ({
           <p>TODAY</p>
         </button>
         <button
-          onClick={() => handleDateButtonClick(+1)}
+          onClick={() => handleDateButtonClick(1)}
           className={`filter__date-button ${
             activeButton === 1 ? 'filter__date-button_current' : ''
           }`}
         >
-          <p>{getFormattedDate(+1)}</p>
+          <p>{getFormattedDate(1)}</p>
           <p>TOMORROW</p>
         </button>
       </div>

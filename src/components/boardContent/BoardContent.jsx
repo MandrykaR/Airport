@@ -1,26 +1,30 @@
 import React, { useEffect, useState } from 'react';
 import FlightsTable from '../flightsTable/FlightsTable';
 import DateSelector from '../dateSelector/DateSelector';
+import moment from 'moment';
 import { useSearchParams } from 'react-router-dom';
 
 import './boardContent.scss';
 
 const BoardContent = ({ flights, type: propType, date: propDate }) => {
   const [searchParams, setSearchParams] = useSearchParams();
-  const [activeButton, setActiveButton] = useState(0);
+  const [activeButton, setActiveButton] = useState(null);
+
+  const [systemDate] = useState(new Date());
   const [selectedDate, setSelectedDate] = useState(
     propDate ? new Date(propDate) : new Date()
   );
+
   const cutoffDate = new Date('2022-02-23');
 
   const queryType = searchParams.get('type') || propType || 'departures';
   const queryDate =
     searchParams.get('date') ||
-    (propDate ? propDate : new Date().toISOString().split('T')[0]);
+    (propDate ? propDate : moment().format('YYYY-MM-DD'));
 
   useEffect(() => {
     if (queryDate) {
-      setSelectedDate(new Date(queryDate));
+      setSelectedDate(moment(queryDate, 'YYYY-MM-DD').toDate());
     }
   }, [queryDate]);
 
@@ -28,71 +32,69 @@ const BoardContent = ({ flights, type: propType, date: propDate }) => {
     const dateValue = e.target.value;
 
     if (!dateValue) {
-      setSelectedDate(new Date());
+      const today = moment();
+      setSelectedDate(today.toDate());
       setSearchParams({
         type: queryType,
-        date: new Date().toISOString().split('T')[0],
+        date: today.format('YYYY-MM-DD'),
       });
       return;
     }
 
-    const newDate = new Date(dateValue);
-    if (isNaN(newDate)) {
+    const newDate = moment(dateValue, 'YYYY-MM-DD');
+    if (!newDate.isValid()) {
       console.error('Invalid date value:', dateValue);
       return;
     }
 
-    setSelectedDate(newDate);
+    setSelectedDate(newDate.toDate());
     setSearchParams({
       type: queryType,
-      date: newDate.toISOString().split('T')[0],
+      date: newDate.format('YYYY-MM-DD'),
     });
   };
 
   const handleDateButtonClick = (days) => {
-    let newDate;
+    const newDate = moment(systemDate).add(days, 'days');
 
-    if (days === 0) {
-      newDate = new Date();
-    } else {
-      newDate = new Date(selectedDate);
-      newDate.setDate(newDate.getDate() + days);
-    }
-
-    if (isNaN(newDate)) {
+    if (!newDate.isValid()) {
       console.error('Invalid date after button click:', newDate);
       return;
     }
 
-    setSelectedDate(newDate);
+    setSelectedDate(newDate.toDate());
     setActiveButton(days);
 
     setSearchParams({
       type: queryType,
-      date: newDate.toISOString().split('T')[0],
+      date: newDate.format('YYYY-MM-DD'),
+    });
+  };
+
+  const handleTypeChange = (type) => {
+    setSearchParams({
+      type,
+      date: moment(selectedDate).format('YYYY-MM-DD'),
     });
   };
 
   const getFormattedDate = (offsetDays) => {
-    const date = new Date(selectedDate);
-    date.setDate(date.getDate() + offsetDays);
-
-    const day = String(date.getDate()).padStart(2, '0');
-    const month = String(date.getMonth() + 1).padStart(2, '0');
-
-    return `${day}/${month}`;
+    return moment(systemDate).add(offsetDays, 'days').format('DD/MM');
   };
 
   const filteredFlights = flights.filter((flight) => {
-    const flightDate = new Date(flight.departureDateExpected);
+    const flightDate = moment(flight.departureDateExpected, 'YYYY-MM-DD');
 
     if (queryType === 'departures') {
-      return flight.type === 'DEPARTURE' && flightDate <= selectedDate;
+      return (
+        flight.type === 'DEPARTURE' &&
+        flightDate.isSameOrBefore(moment(selectedDate))
+      );
     } else if (queryType === 'arrivals') {
       return (
         flight.type === 'ARRIVAL' &&
-        flightDate <= selectedDate &&
-        flightDate <= cutoffDate
+        flightDate.isSameOrBefore(moment(selectedDate)) &&
+        flightDate.isSameOrBefore(moment(cutoffDate))
       );
     }
 
@@ -107,14 +109,7 @@ const BoardContent = ({ flights, type: propType, date: propDate }) => {
             className={`filter__button ${
               queryType === 'departures' ? 'filter__button_current' : ''
             }`}
-            onClick={() =>
-              selectedDate
-                ? setSearchParams({
-                    type: 'departures',
-                    date: selectedDate.toISOString().split('T')[0],
-                  })
-                : console.error('Selected date is null')
-            }
+            onClick={() => handleTypeChange('departures')}
           >
             DEPARTURES
           </button>
@@ -122,14 +117,7 @@ const BoardContent = ({ flights, type: propType, date: propDate }) => {
             className={`filter__button ${
               queryType === 'arrivals' ? 'filter__button_current' : ''
             }`}
-            onClick={() =>
-              selectedDate
-                ? setSearchParams({
-                    type: 'arrivals',
-                    date: selectedDate.toISOString().split('T')[0],
-                  })
-                : console.error('Selected date is null')
-            }
+            onClick={() => handleTypeChange('arrivals')}
           >
             ARRIVALS
           </button>

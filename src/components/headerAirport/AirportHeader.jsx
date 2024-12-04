@@ -1,6 +1,15 @@
 import React from 'react';
 import './airportHeader.scss';
 
+const links = [
+  { href: './', label: 'For passengers' },
+  { href: './', label: 'IEV Services' },
+  { href: './', label: 'VIP' },
+  { href: './', label: 'Corporate' },
+  { href: './', label: 'Press Room' },
+  { href: './', label: 'EN' },
+];
+
 const AirportHeader = () => {
   return (
     <header className="header">
@@ -13,24 +22,11 @@ const AirportHeader = () => {
       </a>
       <nav className="header__navigation">
         <ul className="header__links">
-          <li className="header__link">
-            <a href="./">For passengers</a>
-          </li>
-          <li className="header__link">
-            <a href="./">IEV Services</a>
-          </li>
-          <li className="header__link">
-            <a href="./">VIP</a>
-          </li>
-          <li className="header__link">
-            <a href="./">Corporate</a>
-          </li>
-          <li className="header__link">
-            <a href="./">Press Room</a>
-          </li>
-          <li className="header__link">
-            <a href="./">EN</a>
-          </li>
+          {links.map((link, index) => (
+            <li key={index} className="header__link">
+              <a href={link.href}>{link.label}</a>
+            </li>
+          ))}
         </ul>
       </nav>
     </header>
