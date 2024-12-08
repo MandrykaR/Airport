@@ -10,12 +10,11 @@ const BoardContent = ({ flights, type: propType, date: propDate }) => {
   const [searchParams, setSearchParams] = useSearchParams();
   const [activeButton, setActiveButton] = useState(null);
 
-  const [systemDate] = useState(new Date());
   const [selectedDate, setSelectedDate] = useState(
     propDate ? new Date(propDate) : new Date()
   );
 
-  const cutoffDate = new Date('2022-02-23');
+  const flightDataEndDate = new Date('2022-02-23');
 
   const queryType = searchParams.get('type') || propType || 'departures';
   const queryDate =
@@ -55,7 +54,7 @@ const BoardContent = ({ flights, type: propType, date: propDate }) => {
   };
 
   const handleDateButtonClick = (days) => {
-    const newDate = moment(systemDate).add(days, 'days');
+    const newDate = moment().add(days, 'days');
 
     if (!newDate.isValid()) {
       console.error('Invalid date after button click:', newDate);
@@ -79,7 +78,7 @@ const BoardContent = ({ flights, type: propType, date: propDate }) => {
   };
 
   const getFormattedDate = (offsetDays) => {
-    return moment(systemDate).add(offsetDays, 'days').format('DD/MM');
+    return moment().add(offsetDays, 'days').format('DD/MM');
   };
 
   const filteredFlights = flights.filter((flight) => {
@@ -94,7 +93,7 @@ const BoardContent = ({ flights, type: propType, date: propDate }) => {
       return (
         flight.type === 'ARRIVAL' &&
         flightDate.isSameOrBefore(moment(selectedDate)) &&
-        flightDate.isSameOrBefore(moment(cutoffDate))
+        flightDate.isSameOrBefore(moment(flightDataEndDate))
       );
     }
 
@@ -131,7 +130,7 @@ const BoardContent = ({ flights, type: propType, date: propDate }) => {
           activeButton={activeButton}
         />
       </div>
-      {selectedDate > cutoffDate ? (
+      {selectedDate > flightDataEndDate ? (
         <div className="filter__title">
           <h5 className="filter__message filter__message--null">No flights</h5>
         </div>

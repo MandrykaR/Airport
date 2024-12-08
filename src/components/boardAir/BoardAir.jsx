@@ -5,7 +5,7 @@ import { useSearchParams } from 'react-router-dom';
 
 const BoardAir = () => {
   const [filteredFlights, setFilteredFlights] = useState([]);
-  const [searchParams, setSearchParams] = useSearchParams();
+  const [searchParams] = useSearchParams();
 
   const queryType = searchParams.get('type') || 'arrivals';
   const date =

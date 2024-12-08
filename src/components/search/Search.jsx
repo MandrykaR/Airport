@@ -6,7 +6,6 @@ import { useNavigate, useLocation } from 'react-router-dom';
 
 const Search = ({ setFilteredFlights }) => {
   const [searchTerm, setSearchTerm] = useState('');
-  const [initialFlights, setInitialFlights] = useState([]);
 
   const dispatch = useDispatch();
   const flights = useSelector((state) => state.flights.data);
@@ -18,13 +17,6 @@ const Search = ({ setFilteredFlights }) => {
   useEffect(() => {
     dispatch(fetchFlights());
   }, [dispatch]);
-
-  useEffect(() => {
-    if (loadingStatus === 'succeeded') {
-      setFilteredFlights(flights);
-      setInitialFlights(flights);
-    }
-  }, [flights, loadingStatus, setFilteredFlights]);
 
   const handleInputChange = (e) => {
     const newSearchTerm = e.target.value;
@@ -42,21 +34,19 @@ const Search = ({ setFilteredFlights }) => {
   const handleSearch = (e) => {
     e.preventDefault();
     if (loadingStatus === 'succeeded') {
-      const filtered = initialFlights.filter((flight) => {
-        return (
-          (flight.departureCity?.toLowerCase() || '').includes(
-            searchTerm.toLowerCase()
-          ) ||
-          (flight.arrivalCity?.toLowerCase() || '').includes(
-            searchTerm.toLowerCase()
-          ) ||
-          (flight.codeShare || '').includes(searchTerm) ||
-          new Date(flight.arrivalDateExpected)
-            .toLocaleString()
-            .toLowerCase()
-            .includes(searchTerm.toLowerCase())
-        );
-      });
+      const searchTermLower = searchTerm.toLowerCase();
+
+      const filtered = flights.filter((flight) =>
+        [
+          flight.departureCity,
+          flight.arrivalCity,
+          flight.codeShare,
+          new Date(flight.arrivalDateExpected).toLocaleString(),
+        ]
+          .map((field) => field?.toLowerCase())
+          .some((field) => field?.includes(searchTermLower))
+      );
+
       setFilteredFlights(filtered);
     }
   };
