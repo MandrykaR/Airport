@@ -4,21 +4,16 @@ import './airportHeader.scss';
 const links = [
   { href: './', label: 'For passengers' },
   { href: './', label: 'IEV Services' },
-  { href: './', label: 'VIP' },
   { href: './', label: 'Corporate' },
-  { href: './', label: 'Press Room' },
-  { href: './', label: 'EN' },
+  { href: '/lastNews', label: 'Last News' },
+  { href: '/login', label: 'Login' },
 ];
 
 const AirportHeader = () => {
   return (
     <header className="header">
       <a href="./" className="header__logo">
-        <img
-          className="header__logo--air"
-          src="https://chic-banoffee-85a54a.netlify.app/images/header/logo.webp"
-          alt="Logo"
-        />
+        <img src="/src/img/27638198_7302018.svg" />
       </a>
       <nav className="header__navigation">
         <ul className="header__links">

@@ -5,6 +5,7 @@ $header-text-color: white;
 $even-row-bg: #cdefff;
 $terminal-green: #00b300;
 $terminal-red: #ff1a1a;
+@use 'sass:color';
 
 .table {
   width: 100%;
@@ -20,7 +21,7 @@ $terminal-red: #ff1a1a;
       padding: 10px 20px;
       text-align: left;
       border: 1px solid $border-color;
-      background-color: lighten($background-color, 10%);
+      background-color: color.adjust($background-color, $lightness: 10%);
 
       img {
         vertical-align: middle;

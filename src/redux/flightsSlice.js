@@ -7,6 +7,8 @@ export const fetchFlights = createAsyncThunk(
     const response = await axios.get(
       'https://5e5cf5eb97d2ea0014796f01.mockapi.io/api/v1/airport'
     );
+    console.log(response);
+
     return response.data;
   }
 );
@@ -18,6 +20,7 @@ const flightsSlice = createSlice({
     loadingStatus: 'idle',
     error: null,
   },
+
   reducers: {},
   extraReducers: (builder) => {
     builder
