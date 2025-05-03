@@ -157,24 +157,3 @@ export const useUpdateInfoProfile = () => {
 
   return { getUpdateInfo };
 };
-
-export const usePosts = () => {
-  const token = useAuthToken();
-
-  const editPosts = async (updateData) => {
-    try {
-      const response = await axios.post(`${API_URL}/posts`, updateData, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-
-      return response.data;
-    } catch (error) {
-      throw (
-        error.response?.data?.message ||
-        'There was an error when sending the link'
-      );
-    }
-  };
-
-  return { editPosts };
-};

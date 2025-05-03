@@ -1,65 +1,18 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Box from '@mui/material/Box';
-import Button from '@mui/material/Button';
-import AddIcon from '@mui/icons-material/Add';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/DeleteOutlined';
 import SaveIcon from '@mui/icons-material/Save';
 import CancelIcon from '@mui/icons-material/Close';
 import {
   DataGrid,
-  GridToolbarContainer,
   GridActionsCellItem,
   GridRowModes,
   GridRowEditStopReasons,
 } from '@mui/x-data-grid';
-import {
-  randomCreatedDate,
-  randomTraderName,
-  randomId,
-  randomArrayItem,
-} from '@mui/x-data-grid-generator';
+import { useGetPosts, useDeletePost } from '../../../../entities/postsGateways';
 
 const roles = ['Published', 'Planned', 'In development'];
-const randomRole = () => randomArrayItem(roles);
-
-const initialRows = [
-  {
-    id: randomId(),
-    name: randomTraderName(),
-    age: 25,
-    joinDate: randomCreatedDate(),
-    role: randomRole(),
-  },
-  {
-    id: randomId(),
-    name: randomTraderName(),
-    age: 36,
-    joinDate: randomCreatedDate(),
-    role: randomRole(),
-  },
-  {
-    id: randomId(),
-    name: randomTraderName(),
-    age: 19,
-    joinDate: randomCreatedDate(),
-    role: randomRole(),
-  },
-  {
-    id: randomId(),
-    name: randomTraderName(),
-    age: 28,
-    joinDate: randomCreatedDate(),
-    role: randomRole(),
-  },
-  {
-    id: randomId(),
-    name: randomTraderName(),
-    age: 23,
-    joinDate: randomCreatedDate(),
-    role: randomRole(),
-  },
-];
 
 function EditToolbar({ setRows, setRowModesModel }) {
   const handleClick = () => {
@@ -74,18 +27,33 @@ function EditToolbar({ setRows, setRowModesModel }) {
     }));
   };
 
-  return (
-    <GridToolbarContainer>
-      <Button color="primary" startIcon={<AddIcon />} onClick={handleClick}>
-        Add record
-      </Button>
-    </GridToolbarContainer>
-  );
+  return handleClick;
 }
 
-export default function FullFeaturedCrudGrid() {
-  const [rows, setRows] = useState(initialRows);
+const TablePostsAdmin = () => {
+  const [rows, setRows] = useState([]);
   const [rowModesModel, setRowModesModel] = useState({});
+  const { getPosts } = useGetPosts();
+  const { deletePosts } = useDeletePost();
+
+  useEffect(() => {
+    const fetchPosts = async () => {
+      try {
+        const data = await getPosts({ page: 1, limit: 10 });
+        const posts = data.data.posts;
+
+        const formattedRows = posts.map((post) => ({
+          id: post.id,
+          name: post.title,
+          postDate: new Date(post.createdAt),
+          status: post.status || roles[0],
+        }));
+
+        setRows(formattedRows);
+      } catch (error) {}
+    };
+    fetchPosts();
+  }, []);
 
   const handleRowEditStop = (params, event) => {
     if (params.reason === GridRowEditStopReasons.rowFocusOut) {
@@ -101,8 +69,13 @@ export default function FullFeaturedCrudGrid() {
     setRowModesModel({ ...rowModesModel, [id]: { mode: GridRowModes.View } });
   };
 
-  const handleDeleteClick = (id) => () => {
-    setRows(rows.filter((row) => row.id !== id));
+  const handleDeleteClick = async (id) => {
+    try {
+      await deletePosts(id);
+      setRows((prev) => prev.filter((post) => post.id !== id));
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   const handleCancelClick = (id) => () => {
@@ -115,12 +88,6 @@ export default function FullFeaturedCrudGrid() {
     if (editedRow?.isNew) {
       setRows(rows.filter((row) => row.id !== id));
     }
-  };
-
-  const processRowUpdate = (newRow) => {
-    const updatedRow = { ...newRow, isNew: false };
-    setRows(rows.map((row) => (row.id === newRow.id ? updatedRow : row)));
-    return updatedRow;
   };
 
   const handleRowModesModelChange = (newModel) => {
@@ -182,7 +149,7 @@ export default function FullFeaturedCrudGrid() {
           <GridActionsCellItem
             icon={<DeleteIcon />}
             label="Delete"
-            onClick={handleDeleteClick(id)}
+            onClick={() => handleDeleteClick(id)}
             color="inherit"
           />,
         ];
@@ -210,7 +177,6 @@ export default function FullFeaturedCrudGrid() {
         rowModesModel={rowModesModel}
         onRowModesModelChange={handleRowModesModelChange}
         onRowEditStop={handleRowEditStop}
-        processRowUpdate={processRowUpdate}
         slots={{ toolbar: EditToolbar }}
         slotProps={{
           toolbar: { setRows, setRowModesModel },
@@ -218,4 +184,6 @@ export default function FullFeaturedCrudGrid() {
       />
     </Box>
   );
-}
+};
+
+export default TablePostsAdmin;

@@ -7,19 +7,47 @@
 }
 
 .main-container {
-  font-family: 'Lato';
-  width: fit-content;
+  max-width: 80%;
   margin-left: auto;
   margin-right: auto;
+
+  .title-post {
+    font-size: 34px;
+    font-weight: bold;
+    margin-bottom: 20px;
+    text-align: center;
+  }
+
+  .input-post {
+    font-family: 'Lato', sans-serif;
+    font-size: 16px;
+    padding: 10px 15px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    width: 100%;
+    box-sizing: border-box;
+    margin-bottom: 20px;
+
+    &:focus {
+      outline: none;
+      border-color: #007bff;
+      box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+    }
+
+    &::placeholder {
+      font-style: italic;
+      color: #888;
+    }
+  }
+
+  .button-post {
+    width: 20%;
+  }
 }
 
 .ck-content {
+  height: 300px;
   font-family: 'Lato';
   line-height: 1.6;
   word-break: break-word;
-}
-
-.editor-container_classic-editor .editor-container__editor {
-  min-width: 795px;
-  max-width: 795px;
 }
