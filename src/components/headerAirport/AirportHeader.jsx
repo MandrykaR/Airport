@@ -2,9 +2,6 @@ import React from 'react';
 import './airportHeader.scss';
 
 const links = [
-  { href: './', label: 'For passengers' },
-  { href: './', label: 'IEV Services' },
-  { href: './', label: 'Corporate' },
   { href: '/lastNews', label: 'Last News' },
   { href: '/login', label: 'Login' },
 ];

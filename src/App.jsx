@@ -7,8 +7,9 @@ import store from './redux/store';
 import Login from './components/login/Login';
 import ResetLinkEmail from './components/login/components/resetLinkEmail/ResetLinkEmail';
 import AdminPanel from './components/adminPanel/AdminPanel.jsx';
-import PostTable from './components/adminPanel/components/PostTabele/PostTable.jsx';
+import PostTable from './components/adminPanel/components/PostTable/PostTable.jsx';
 import ProfileUser from './components/adminPanel/components/ProfileUser/ProfileUser.jsx';
+import PrivateRoute from './routes/PrivateRoute.jsx';
 
 const App = () => {
   return (
@@ -21,9 +22,31 @@ const App = () => {
           <Route path="/" element={<BoardAir />} />
           <Route path="/arrivals" element={<BoardAir type="arrivals" />} />
           <Route path="/departures" element={<BoardAir type="departures" />} />
-          <Route path="/admin" element={<AdminPanel type="admin" />} />
-          <Route path="/posts" element={<PostTable />} />
-          <Route path="/profile" element={<ProfileUser />} type="profile" />
+          <Route
+            path="/admin"
+            element={
+              <PrivateRoute>
+                <AdminPanel type="admin" />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/posts"
+            element={
+              <PrivateRoute>
+                <PostTable />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/profile"
+            element={
+              <PrivateRoute>
+                <ProfileUser />
+              </PrivateRoute>
+            }
+            type="profile"
+          />
           <Route
             path="/arrivals/:date"
             element={<BoardAir type="arrivals" />}

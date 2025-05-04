@@ -111,7 +111,7 @@ const getEditorConfig = (LICENSE_KEY) => ({
       'resizeImage',
     ],
   },
-  initialData: '<h2>Write news here</h2>',
+  initialData: '<h2>Write the news here</h2>',
   licenseKey: LICENSE_KEY,
   link: {
     addTargetToExternalLinks: true,
