@@ -1,0 +1,157 @@
+@use 'sass:math';
+
+// Учитываем высоту хедера (примерно 60px, как на скриншоте)
+$header-height: 60px;
+
+.last-news-container {
+  height: calc(100vh - #{$header-height});
+  width: 100vw;
+  position: relative;
+  overflow: hidden;
+  background-color: #e5e7eb; // Серый фон, как на скриншоте
+}
+
+.news-carousel {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+.news-track {
+  display: flex;
+  width: 100%;
+  height: 100%;
+  transition: transform 0.6s ease-in-out; // Плавная анимация слайда
+}
+
+.news-item {
+  flex: 0 0 100%;
+  height: 100%;
+  position: relative;
+}
+
+.news-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: brightness(0.7); // Затемнение для читаемости текста
+}
+
+.news-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: rgba(0, 0, 0, 0.3); // Полупрозрачный слой
+}
+
+.news-content {
+  text-align: center;
+  color: #ffffff;
+  padding: 2rem;
+  max-width: 800px;
+}
+
+.news-title {
+  font-size: 2.5rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+.news-description {
+  font-size: 1.25rem;
+  margin-bottom: 1rem;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+}
+
+.news-date {
+  font-size: 1rem;
+  font-style: italic;
+}
+
+.carousel-button {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background-color: rgba(0, 0, 0, 0.5);
+  color: #ffffff;
+  border: none;
+  padding: 1rem;
+  font-size: 1.5rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+
+  &:hover {
+    background-color: rgba(0, 0, 0, 0.8);
+  }
+
+  &.prev {
+    left: 1rem;
+  }
+
+  &.next {
+    right: 1rem;
+  }
+}
+
+.carousel-indicators {
+  position: absolute;
+  bottom: 1rem;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 0.5rem;
+}
+
+.indicator {
+  width: 10px;
+  height: 10px;
+  background-color: rgba(255, 255, 255, 0.5);
+  border-radius: 50%;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+
+  &.active {
+    background-color: #ffffff;
+  }
+}
+
+// Адаптивность для меньших экранов
+@media (max-width: 768px) {
+  .news-title {
+    font-size: 1.75rem;
+  }
+
+  .news-description {
+    font-size: 1rem;
+  }
+
+  .news-date {
+    font-size: 0.875rem;
+  }
+
+  .carousel-button {
+    padding: 0.5rem;
+    font-size: 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .news-title {
+    font-size: 1.25rem;
+  }
+
+  .news-description {
+    font-size: 0.875rem;
+  }
+
+  .news-content {
+    padding: 1rem;
+  }
+}

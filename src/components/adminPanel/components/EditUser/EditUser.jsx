@@ -25,7 +25,11 @@ import {
   DialogContent,
   DialogTitle,
   TextField,
+  Typography,
 } from '@mui/material';
+import ManageAccountsIcon from '@mui/icons-material/ManageAccounts';
+
+import './editUser.scss';
 
 const roles = [
   {
@@ -142,8 +146,6 @@ export default function EditUsers() {
 
   const processRowUpdate = async (newRow) => {
     const updatedRow = { ...newRow, isNew: false };
-    console.log(newRow);
-    console.log(updatedRow);
 
     try {
       await editUser({
@@ -261,6 +263,13 @@ export default function EditUsers() {
         },
       }}
     >
+      <div className="box-name-edit">
+        <ManageAccountsIcon fontSize="large" color="action" />
+        <Typography variant="h4" sx={{ fontWeight: 600 }}>
+          Edit Users
+        </Typography>
+      </div>
+
       <DataGrid
         rows={rows}
         columns={columns}

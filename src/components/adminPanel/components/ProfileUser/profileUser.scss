@@ -2,6 +2,8 @@
   display: flex;
   justify-content: center;
   margin-top: 48px;
+  width: 100%;
+  max-width: 1200px;
 
   .profile-paper {
     padding: 48px;
@@ -30,7 +32,6 @@
     &:hover {
       box-shadow: 0 8px 28px rgba(13, 14, 16, 0.3);
     }
-
 
     .profile-data {
       display: flex;
@@ -67,14 +68,19 @@
       }
     }
 
+    .profile-name {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 5px;
+    }
+
     .profile-form {
       display: flex;
       flex-direction: column;
       gap: 24px;
       padding: 24px;
-      background-color: #fdfdfd;
       border-radius: 12px;
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
       max-width: 700px;
       margin: 0 auto;
 

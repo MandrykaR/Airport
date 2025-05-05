@@ -10,6 +10,7 @@ import AdminPanel from './components/adminPanel/AdminPanel.jsx';
 import PostTable from './components/adminPanel/components/PostTable/PostTable.jsx';
 import ProfileUser from './components/adminPanel/components/ProfileUser/ProfileUser.jsx';
 import PrivateRoute from './routes/PrivateRoute.jsx';
+import LastNews from './components/lastNews/LastNews.jsx';
 
 const App = () => {
   return (
@@ -19,9 +20,6 @@ const App = () => {
         <Routes>
           <Route path="/login" element={<Login />} />
           <Route path="/auth/reset-password" element={<ResetLinkEmail />} />
-          <Route path="/" element={<BoardAir />} />
-          <Route path="/arrivals" element={<BoardAir type="arrivals" />} />
-          <Route path="/departures" element={<BoardAir type="departures" />} />
           <Route
             path="/admin"
             element={
@@ -47,6 +45,11 @@ const App = () => {
             }
             type="profile"
           />
+
+          <Route path="/" element={<BoardAir />} />
+          <Route path="/arrivals" element={<BoardAir type="arrivals" />} />
+          <Route path="/departures" element={<BoardAir type="departures" />} />
+          <Route path="/lastNews" element={<LastNews type="lastNews" />} />
           <Route
             path="/arrivals/:date"
             element={<BoardAir type="arrivals" />}

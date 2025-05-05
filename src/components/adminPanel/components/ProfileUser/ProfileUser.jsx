@@ -12,6 +12,7 @@ import {
   useGetMyInfo,
   useUpdateInfoProfile,
 } from '../../../../entities/usersGateways';
+import InfoIcon from '@mui/icons-material/Info';
 
 import './profileUser.scss';
 
@@ -92,7 +93,9 @@ export default function Profile() {
       <Paper elevation={3} className="profile-paper">
         <Box className="profile-data">
           <Typography variant="h4" gutterBottom sx={{ fontWeight: 600 }}>
-            Personal Info
+            <div className="profile-name">
+              <InfoIcon fontSize="large" color='info'/> Personal Info
+            </div>
           </Typography>
 
           <Box className="profile-data-row">

@@ -14,7 +14,6 @@
   .title-post {
     font-size: 34px;
     font-weight: bold;
-    margin-bottom: 20px;
     text-align: center;
   }
 
@@ -50,4 +49,12 @@
   font-family: 'Lato';
   line-height: 1.6;
   word-break: break-word;
+}
+
+.box-name {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin-bottom: 20px;
 }

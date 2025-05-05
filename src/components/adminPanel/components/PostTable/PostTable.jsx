@@ -3,7 +3,8 @@ import { CKEditor } from '@ckeditor/ckeditor5-react';
 import { ClassicEditor } from 'ckeditor5';
 import getEditorConfig from './config/ckeditorConfig';
 import { useCreatePost } from '../../../../entities/postsGateways';
-import { Button } from '@mui/material';
+import { Button, Typography } from '@mui/material';
+import ModeEditRoundedIcon from '@mui/icons-material/ModeEditRounded';
 
 import 'ckeditor5/ckeditor5.css';
 import './postTable.scss';
@@ -44,7 +45,12 @@ const PostTable = () => {
 
   return (
     <div className="main-container">
-      <h2 className="title-post">Create Post</h2>
+      <div className="box-name">
+        <ModeEditRoundedIcon fontSize="large" color="action" />
+        <Typography variant="h4" sx={{ fontWeight: 600 }}>
+          Create Post
+        </Typography>
+      </div>
       <input
         value={title}
         className="input-post"

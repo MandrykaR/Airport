@@ -11,6 +11,10 @@ import {
   GridRowEditStopReasons,
 } from '@mui/x-data-grid';
 import { useGetPosts, useDeletePost } from '../../../../entities/postsGateways';
+import { Typography } from '@mui/material';
+import ListAltIcon from '@mui/icons-material/ListAlt';
+
+import './tablePanel.scss';
 
 const roles = ['Published', 'Planned', 'In development'];
 
@@ -170,6 +174,13 @@ const TablePostsAdmin = () => {
         },
       }}
     >
+      <div className="box-name-posts">
+        <ListAltIcon fontSize="large" color="action" />
+        <Typography variant="h4" sx={{ fontWeight: 600 }}>
+          List Posts
+        </Typography>
+      </div>
+
       <DataGrid
         rows={rows}
         columns={columns}

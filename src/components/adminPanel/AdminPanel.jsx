@@ -16,14 +16,31 @@ import { useState } from 'react';
 import './adminPanel.scss';
 
 const menuItems = [
-  { text: 'Admin Panel', key: 'admin-panel', icon: <InboxIcon /> },
-  { text: 'Posts News', key: 'posts', icon: <MailIcon /> },
-  { text: 'Edit User', key: 'edit-user', icon: <InboxIcon /> },
-  { text: 'Profile User', key: 'profile-user', icon: <MailIcon /> },
+  {
+    text: 'Admin Panel',
+    key: 'admin-panel',
+    icon: <InboxIcon />,
+  },
+  {
+    text: 'Posts News',
+    key: 'posts',
+    icon: <MailIcon />,
+  },
+  {
+    text: 'Edit Users',
+    key: 'edit-user',
+    icon: <InboxIcon />,
+  },
+  {
+    text: 'Profile User',
+    key: 'profile-user',
+    icon: <MailIcon />,
+  },
 ];
 
 const AdminPanel = () => {
   const [tabActive, setTabActive] = useState('admin-panel');
+  const activeItem = menuItems.find((item) => item.key === tabActive);
 
   const renderItem = () => {
     switch (tabActive) {
