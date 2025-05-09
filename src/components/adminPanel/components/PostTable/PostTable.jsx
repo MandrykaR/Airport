@@ -34,10 +34,11 @@ const PostTable = () => {
 
   const handleSave = async () => {
     try {
-      await createPost({
+      const res = await createPost({
         title,
         content: editorInstance.getData() || '',
       });
+      console.log(res);
     } catch (error) {
       console.error('error', error);
     }

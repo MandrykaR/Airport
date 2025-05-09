@@ -99,9 +99,9 @@ export default function EditUsers() {
           status: user.isAdmin,
           email: user.email,
         }));
+        console.log(mappedUsers);
 
         setRows(mappedUsers);
-
         return users;
       } catch (err) {
         console.error(err);

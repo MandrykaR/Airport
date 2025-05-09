@@ -40,7 +40,6 @@ const menuItems = [
 
 const AdminPanel = () => {
   const [tabActive, setTabActive] = useState('admin-panel');
-  const activeItem = menuItems.find((item) => item.key === tabActive);
 
   const renderItem = () => {
     switch (tabActive) {
