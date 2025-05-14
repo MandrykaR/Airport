@@ -11,7 +11,42 @@
   justify-items: center;
 }
 
-.post-card {
+.posts-slider {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  margin-bottom: 2rem;
+}
+
+.posts-track {
+  display: flex;
+  transition: transform 0.5s ease;
+}
+
+.slider-arrow {
+  background: #fff;
+  border: none;
+  font-size: 2rem;
+  cursor: pointer;
+  z-index: 1;
+  padding: 0.5rem 1rem;
+  border-radius: 50%;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  position: relative;
+
+  &.left {
+    margin-right: 1rem;
+  }
+
+  &.right {
+    margin-left: 1rem;
+  }
+
+  &:hover {
+    background: #f0f0f0;
+  }
 }
 
 .post-card .MuiCardMedia-root {

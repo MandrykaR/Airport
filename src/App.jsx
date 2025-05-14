@@ -11,6 +11,7 @@ import PostTable from './components/adminPanel/components/PostTable/PostTable.js
 import ProfileUser from './components/adminPanel/components/ProfileUser/ProfileUser.jsx';
 import PrivateRoute from './routes/PrivateRoute.jsx';
 import LastNews from './components/lastNews/LastNews.jsx';
+import PageNews from './components/lastNews/components/pageNews/PageNews.jsx';
 
 const App = () => {
   return (
@@ -50,6 +51,7 @@ const App = () => {
           <Route path="/arrivals" element={<BoardAir type="arrivals" />} />
           <Route path="/departures" element={<BoardAir type="departures" />} />
           <Route path="/lastNews" element={<LastNews type="lastNews" />} />
+          <Route path="/news/:id" element={<PageNews type="pageNews" />} />
           <Route
             path="/arrivals/:date"
             element={<BoardAir type="arrivals" />}
