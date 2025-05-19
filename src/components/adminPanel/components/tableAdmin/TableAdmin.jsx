@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import Box from '@mui/material/Box';
-import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/DeleteOutlined';
 import SaveIcon from '@mui/icons-material/Save';
 import CancelIcon from '@mui/icons-material/Close';
@@ -10,13 +9,15 @@ import {
   GridRowModes,
   GridRowEditStopReasons,
 } from '@mui/x-data-grid';
-import { useGetPosts, useDeletePost } from '../../../../entities/postsGateways';
+import {
+  useGetPosts,
+  useDeletePost,
+  useUpdatePost,
+} from '../../../../entities/postsGateways';
 import { Typography } from '@mui/material';
 import ListAltIcon from '@mui/icons-material/ListAlt';
 
 import './tablePanel.scss';
-
-const roles = ['Published', 'Planned', 'In development'];
 
 function EditToolbar({ setRows, setRowModesModel }) {
   const handleClick = () => {
@@ -39,6 +40,7 @@ const TablePostsAdmin = () => {
   const [rowModesModel, setRowModesModel] = useState({});
   const { getPosts } = useGetPosts();
   const { deletePosts } = useDeletePost();
+  const { updatePost } = useUpdatePost();
 
   useEffect(() => {
     const fetchPosts = async () => {
@@ -50,7 +52,7 @@ const TablePostsAdmin = () => {
           id: post.id,
           name: post.title,
           postDate: new Date(post.createdAt),
-          status: post.status || roles[0],
+          status: post.status || 'Published',
         }));
 
         setRows(formattedRows);
@@ -59,14 +61,26 @@ const TablePostsAdmin = () => {
     fetchPosts();
   }, []);
 
+  const processRowUpdate = async (newRow) => {
+    const updateData = {
+      title: newRow.name,
+      postDate: newRow.postDate,
+      status: newRow.status,
+    };
+
+    try {
+      const updatedPost = await updatePost(newRow.id, updateData);
+      return { ...newRow, ...updatedPost.data };
+    } catch (error) {
+      console.error(error);
+      return newRow;
+    }
+  };
+
   const handleRowEditStop = (params, event) => {
     if (params.reason === GridRowEditStopReasons.rowFocusOut) {
       event.defaultMuiPrevented = true;
     }
-  };
-
-  const handleEditClick = (id) => () => {
-    setRowModesModel({ ...rowModesModel, [id]: { mode: GridRowModes.Edit } });
   };
 
   const handleSaveClick = (id) => () => {
@@ -112,8 +126,7 @@ const TablePostsAdmin = () => {
       headerName: 'Status',
       width: 220,
       editable: true,
-      type: 'singleSelect',
-      valueOptions: roles,
+      valueOptions: 'Published',
     },
     {
       field: 'actions',
@@ -143,13 +156,6 @@ const TablePostsAdmin = () => {
         }
 
         return [
-          <GridActionsCellItem
-            icon={<EditIcon />}
-            label="Edit"
-            className="textPrimary"
-            onClick={handleEditClick(id)}
-            color="inherit"
-          />,
           <GridActionsCellItem
             icon={<DeleteIcon />}
             label="Delete"
@@ -192,6 +198,7 @@ const TablePostsAdmin = () => {
         slotProps={{
           toolbar: { setRows, setRowModesModel },
         }}
+        processRowUpdate={processRowUpdate}
       />
     </Box>
   );

@@ -29,7 +29,7 @@ const FlightsTable = ({ filteredFlights }) => {
                 </td>
                 <td>{flight.arrivalCity}</td>
                 <td>
-                  Flew out{' '}
+                  Flew out
                   {new Date(flight.departureDateExpected).toLocaleTimeString()}
                 </td>
                 <td>

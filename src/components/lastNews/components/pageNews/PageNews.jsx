@@ -34,7 +34,10 @@ const PageNews = () => {
 
       <img className="news-image" src={post.image} alt="post" />
 
-      <div className="news-description">{post.description}</div>
+      <div
+        className="ck-content"
+        dangerouslySetInnerHTML={{ __html: post.description }}
+      />
     </div>
   );
 };

@@ -3,18 +3,16 @@ import FlightsTable from '../flightsTable/FlightsTable';
 import DateSelector from '../dateSelector/DateSelector';
 import moment from 'moment';
 import { useSearchParams } from 'react-router-dom';
-
 import './boardContent.scss';
 
 const BoardContent = ({ flights, type: propType, date: propDate }) => {
   const [searchParams, setSearchParams] = useSearchParams();
-  const [activeButton, setActiveButton] = useState(null);
 
   const [selectedDate, setSelectedDate] = useState(
-    propDate ? new Date(propDate) : new Date()
+    propDate ? moment(propDate, 'YYYY-MM-DD').toDate() : new Date()
   );
 
-  const flightDataEndDate = new Date('2022-02-23');
+  const [activeButton, setActiveButton] = useState(null);
 
   const queryType = searchParams.get('type') || propType || 'departures';
   const queryDate =
@@ -22,83 +20,30 @@ const BoardContent = ({ flights, type: propType, date: propDate }) => {
     (propDate ? propDate : moment().format('YYYY-MM-DD'));
 
   useEffect(() => {
-    if (queryDate) {
-      setSelectedDate(moment(queryDate, 'YYYY-MM-DD').toDate());
-    }
+    setSelectedDate(moment(queryDate, 'YYYY-MM-DD').toDate());
   }, [queryDate]);
 
   const handleDateChange = (e) => {
-    const dateValue = e.target.value;
-
-    if (!dateValue) {
-      const today = moment();
-      setSelectedDate(today.toDate());
-      setSearchParams({
-        type: queryType,
-        date: today.format('YYYY-MM-DD'),
-      });
-      return;
-    }
-
-    const newDate = moment(dateValue, 'YYYY-MM-DD');
-    if (!newDate.isValid()) {
-      console.error('Invalid date value:', dateValue);
-      return;
-    }
+    const value = e.target.value;
+    const newDate = moment(value || undefined, 'YYYY-MM-DD');
+    if (!newDate.isValid()) return;
 
     setSelectedDate(newDate.toDate());
-    setSearchParams({
-      type: queryType,
-      date: newDate.format('YYYY-MM-DD'),
-    });
+    setSearchParams({ type: queryType, date: newDate.format('YYYY-MM-DD') });
   };
 
   const handleDateButtonClick = (days) => {
     const newDate = moment().add(days, 'days');
-
-    if (!newDate.isValid()) {
-      console.error('Invalid date after button click:', newDate);
-      return;
-    }
-
     setSelectedDate(newDate.toDate());
     setActiveButton(days);
-
-    setSearchParams({
-      type: queryType,
-      date: newDate.format('YYYY-MM-DD'),
-    });
+    setSearchParams({ type: queryType, date: newDate.format('YYYY-MM-DD') });
   };
 
   const handleTypeChange = (type) => {
-    setSearchParams({
-      type,
-      date: moment(selectedDate).format('YYYY-MM-DD'),
-    });
+    setSearchParams({ type, date: moment(selectedDate).format('YYYY-MM-DD') });
   };
 
-  const getFormattedDate = (offsetDays) => {
-    return moment().add(offsetDays, 'days').format('DD/MM');
-  };
-
-  const filteredFlights = flights.filter((flight) => {
-    const flightDate = moment(flight.departureDateExpected, 'YYYY-MM-DD');
-
-    if (queryType === 'departures') {
-      return (
-        flight.type === 'DEPARTURE' &&
-        flightDate.isSameOrBefore(moment(selectedDate))
-      );
-    } else if (queryType === 'arrivals') {
-      return (
-        flight.type === 'ARRIVAL' &&
-        flightDate.isSameOrBefore(moment(selectedDate)) &&
-        flightDate.isSameOrBefore(moment(flightDataEndDate))
-      );
-    }
-
-    return false;
-  });
+  const getFormattedDate = (d) => moment().add(d, 'days').format('DD/MM');
 
   return (
     <div className="board__content">
@@ -130,12 +75,13 @@ const BoardContent = ({ flights, type: propType, date: propDate }) => {
           activeButton={activeButton}
         />
       </div>
-      {selectedDate > flightDataEndDate ? (
+
+      {flights.length === 0 ? (
         <div className="filter__title">
           <h5 className="filter__message filter__message--null">No flights</h5>
         </div>
       ) : (
-        <FlightsTable filteredFlights={filteredFlights} />
+        <FlightsTable filteredFlights={flights} />
       )}
     </div>
   );

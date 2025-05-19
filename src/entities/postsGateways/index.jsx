@@ -76,3 +76,28 @@ export const useDeletePost = () => {
 
   return { deletePosts };
 };
+
+export const useUpdatePost = () => {
+  const token = useAuthToken();
+
+  const updatePost = async (id, updateData) => {
+    try {
+      const response = await axios.put(`${API_URL}/posts/${id}`, updateData, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
+      });
+
+      return response.data;
+    } catch (error) {
+      console.error(error);
+      throw (
+        error.response?.data?.message ||
+        'There was an error when sending the post'
+      );
+    }
+  };
+
+  return { updatePost };
+};
