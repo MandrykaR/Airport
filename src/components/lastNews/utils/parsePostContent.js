@@ -3,7 +3,7 @@ export const parsePostContent = (post) => {
   const doc = parser.parseFromString(post.content, 'text/html');
 
   const imagePost = doc.querySelector('img');
-  const imagePostSrc = imagePost?.src ?? '/public/img/no-photo.png';
+  const imagePostSrc = imagePost?.src ?? '/public/imageNews/no-photo.png';
   imagePost?.remove();
 
   const descriptionHtml = doc.body.innerHTML;
@@ -16,7 +16,7 @@ export const parsePostContent = (post) => {
     image: imagePostSrc,
     description: descriptionHtml,
     descriptionText: descriptionPlain,
-
+    postDate: post.createdAt,
     fullHtml: post.content,
   };
 };

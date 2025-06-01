@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Link from '@mui/material/Link';
 import { useDispatch } from 'react-redux';
+import { Snackbar, Alert } from '@mui/material';
 import TextField from '@mui/material/TextField';
 import { setToken } from '../../redux/authSlice';
 import { loginUser } from '../../entities/authGateways';
@@ -11,7 +12,11 @@ import './login.scss';
 const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [error, setError] = useState('');
+  const [snackbar, setSnackbar] = useState({
+    open: false,
+    message: '',
+    severity: 'info',
+  });
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -21,14 +26,20 @@ const Login = () => {
     try {
       const res = await loginUser(email, password);
       dispatch(setToken(res.data.token));
-      navigate('/admin');
+      setSnackbar({
+        open: true,
+        message: 'Login successful!',
+        severity: 'success',
+      });
+      setTimeout(() => navigate('/admin'), 1000);
     } catch (err) {
-      if (err.response && err.response.data && err.response.data.message) {
-        setError(err.response.data.message);
-      } else {
-        setError('There was a login error');
-      }
+      const message = err.response?.data?.message || 'There was a login error';
+      setSnackbar({ open: true, message, severity: 'error' });
     }
+  };
+
+  const handleCloseSnackbar = () => {
+    setSnackbar({ ...snackbar, open: false });
   };
 
   return (
@@ -78,6 +89,21 @@ const Login = () => {
         >
           Forgot your password?
         </Link>
+
+        <Snackbar
+          open={snackbar.open}
+          autoHideDuration={3000}
+          onClose={handleCloseSnackbar}
+          anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
+        >
+          <Alert
+            onClose={handleCloseSnackbar}
+            severity={snackbar.severity}
+            sx={{ width: '100%' }}
+          >
+            {snackbar.message}
+          </Alert>
+        </Snackbar>
       </form>
     </div>
   );

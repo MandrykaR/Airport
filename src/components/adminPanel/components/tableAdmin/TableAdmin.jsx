@@ -16,6 +16,7 @@ import {
 } from '../../../../entities/postsGateways';
 import { Typography } from '@mui/material';
 import ListAltIcon from '@mui/icons-material/ListAlt';
+import { parsePostContent } from '../../../lastNews/utils/parsePostContent';
 
 import './tablePanel.scss';
 
@@ -46,12 +47,14 @@ const TablePostsAdmin = () => {
     const fetchPosts = async () => {
       try {
         const data = await getPosts({ page: 1, limit: 10 });
-        const posts = data.data.posts;
+        const posts = data.data.posts || [];
+        const rowPost = posts.map(parsePostContent);
 
-        const formattedRows = posts.map((post) => ({
+        const formattedRows = rowPost.map((post) => ({
           id: post.id,
           name: post.title,
           postDate: new Date(post.createdAt),
+          description: post.description,
           status: post.status || 'Published',
         }));
 
@@ -61,30 +64,35 @@ const TablePostsAdmin = () => {
     fetchPosts();
   }, []);
 
-  const processRowUpdate = async (newRow) => {
-    const updateData = {
-      title: newRow.name,
-      postDate: newRow.postDate,
-      status: newRow.status,
-    };
-
-    try {
-      const updatedPost = await updatePost(newRow.id, updateData);
-      return { ...newRow, ...updatedPost.data };
-    } catch (error) {
-      console.error(error);
-      return newRow;
-    }
-  };
-
   const handleRowEditStop = (params, event) => {
     if (params.reason === GridRowEditStopReasons.rowFocusOut) {
       event.defaultMuiPrevented = true;
     }
   };
 
-  const handleSaveClick = (id) => () => {
-    setRowModesModel({ ...rowModesModel, [id]: { mode: GridRowModes.View } });
+  const processRowUpdate = async (newRow, oldRow) => {
+    const updatedPost = {
+      title: newRow.name || '',
+      content: newRow.description || '',
+    };
+
+    try {
+      const updated = await updatePost(newRow.id, updatedPost);
+      const updatedRow = {
+        ...newRow,
+        name: updated.data.title,
+        description: updated.data.content,
+      };
+
+      setRows((prevRows) =>
+        prevRows.map((row) => (row.id === newRow.id ? updatedRow : row))
+      );
+
+      return updatedRow;
+    } catch (error) {
+      console.error('Update error:', error);
+      return oldRow;
+    }
   };
 
   const handleDeleteClick = async (id) => {
@@ -102,8 +110,8 @@ const TablePostsAdmin = () => {
       [id]: { mode: GridRowModes.View, ignoreModifications: true },
     });
 
-    const editedRow = rows.find((row) => row.id === id);
-    if (editedRow?.isNew) {
+    const editRow = rows.find((row) => row.id === id);
+    if (editRow?.isNew) {
       setRows(rows.filter((row) => row.id !== id));
     }
   };
@@ -125,8 +133,15 @@ const TablePostsAdmin = () => {
       field: 'status',
       headerName: 'Status',
       width: 220,
-      editable: true,
+      editable: false,
       valueOptions: 'Published',
+    },
+    {
+      field: 'description',
+      headerName: 'Description',
+      type: 'text',
+      width: 220,
+      editable: true,
     },
     {
       field: 'actions',
@@ -134,6 +149,7 @@ const TablePostsAdmin = () => {
       headerName: 'Actions',
       width: 100,
       cellClassName: 'actions',
+
       getActions: ({ id }) => {
         const isInEditMode = rowModesModel[id]?.mode === GridRowModes.Edit;
 
@@ -143,7 +159,12 @@ const TablePostsAdmin = () => {
               icon={<SaveIcon />}
               label="Save"
               sx={{ color: 'primary.main' }}
-              onClick={handleSaveClick(id)}
+              onClick={() => {
+                setRowModesModel((prevModel) => ({
+                  ...prevModel,
+                  [id]: { mode: GridRowModes.View },
+                }));
+              }}
             />,
             <GridActionsCellItem
               icon={<CancelIcon />}
@@ -156,6 +177,18 @@ const TablePostsAdmin = () => {
         }
 
         return [
+          <GridActionsCellItem
+            icon={<ListAltIcon />}
+            label="Edit"
+            className="textPrimary"
+            onClick={() =>
+              setRowModesModel((prevModel) => ({
+                ...prevModel,
+                [id]: { mode: GridRowModes.Edit, fieldToFocus: 'name' },
+              }))
+            }
+            color="inherit"
+          />,
           <GridActionsCellItem
             icon={<DeleteIcon />}
             label="Delete"
@@ -194,11 +227,11 @@ const TablePostsAdmin = () => {
         rowModesModel={rowModesModel}
         onRowModesModelChange={handleRowModesModelChange}
         onRowEditStop={handleRowEditStop}
+        processRowUpdate={processRowUpdate}
         slots={{ toolbar: EditToolbar }}
         slotProps={{
           toolbar: { setRows, setRowModesModel },
         }}
-        processRowUpdate={processRowUpdate}
       />
     </Box>
   );

@@ -82,7 +82,7 @@ export const useUpdatePost = () => {
 
   const updatePost = async (id, updateData) => {
     try {
-      const response = await axios.put(`${API_URL}/posts/${id}`, updateData, {
+      const response = await axios.put(`${API_URL}posts/${id}`, updateData, {
         headers: {
           Authorization: `Bearer ${token}`,
           'Content-Type': 'application/json',

@@ -45,7 +45,8 @@
 }
 
 .ck-content {
-  height: 300px;
+  min-height: 300px;
+  height: auto;
   font-family: 'Lato';
   line-height: 1.6;
   word-break: break-word;

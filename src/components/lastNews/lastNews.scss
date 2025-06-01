@@ -1,7 +1,16 @@
+@keyframes posts {
+  0% {
+    transform: translateX(0%);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
 .posts-container {
   max-width: 1200px;
   margin: 0 auto;
-  padding: 120px 0 0 0;
+  padding: 160px 0 0 0;
 }
 
 .posts-block {
@@ -13,16 +22,14 @@
 
 .posts-slider {
   position: relative;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  width: 100%;
   overflow: hidden;
-  margin-bottom: 2rem;
+  padding: 20px 0;
 }
 
 .posts-track {
   display: flex;
-  transition: transform 0.5s ease;
+  will-change: transform;
 }
 
 .slider-arrow {

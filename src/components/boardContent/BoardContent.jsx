@@ -40,7 +40,10 @@ const BoardContent = ({ flights, type: propType, date: propDate }) => {
   };
 
   const handleTypeChange = (type) => {
-    setSearchParams({ type, date: moment(selectedDate).format('YYYY-MM-DD') });
+    const params = new URLSearchParams(searchParams);
+    params.set('type', type);
+    params.delete('date');
+    setSearchParams(params);
   };
 
   const getFormattedDate = (d) => moment().add(d, 'days').format('DD/MM');

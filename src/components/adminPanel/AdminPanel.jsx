@@ -5,8 +5,10 @@ import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
-import InboxIcon from '@mui/icons-material/MoveToInbox';
-import MailIcon from '@mui/icons-material/Mail';
+import FactCheckSharpIcon from '@mui/icons-material/FactCheckSharp';
+import AnnouncementSharpIcon from '@mui/icons-material/AnnouncementSharp';
+import GroupAddSharpIcon from '@mui/icons-material/GroupAddSharp';
+import AssignmentIndSharpIcon from '@mui/icons-material/AssignmentIndSharp';
 import EditUser from './components/EditUser/EditUser';
 import TableAdmin from './components/tableAdmin/TableAdmin';
 import PostTable from './components/PostTable/PostTable';
@@ -17,24 +19,24 @@ import './adminPanel.scss';
 
 const menuItems = [
   {
-    text: 'Admin Panel',
-    key: 'admin-panel',
-    icon: <InboxIcon />,
+    text: 'List Posts',
+    key: 'list-posts',
+    icon: <FactCheckSharpIcon />,
   },
   {
-    text: 'Posts News',
-    key: 'posts',
-    icon: <MailIcon />,
+    text: 'Create News',
+    key: 'create-news',
+    icon: <AnnouncementSharpIcon />,
   },
   {
     text: 'Edit Users',
     key: 'edit-user',
-    icon: <InboxIcon />,
+    icon: <GroupAddSharpIcon />,
   },
   {
     text: 'Profile User',
     key: 'profile-user',
-    icon: <MailIcon />,
+    icon: <AssignmentIndSharpIcon />,
   },
 ];
 
@@ -43,7 +45,7 @@ const AdminPanel = () => {
 
   const renderItem = () => {
     switch (tabActive) {
-      case 'posts':
+      case 'create-news':
         return <PostTable />;
       case 'edit-user':
         return <EditUser />;

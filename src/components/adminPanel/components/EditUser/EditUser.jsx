@@ -24,6 +24,7 @@ import {
   DialogActions,
   DialogContent,
   DialogTitle,
+  MenuItem,
   TextField,
   Typography,
 } from '@mui/material';
@@ -66,6 +67,8 @@ export default function EditUsers() {
       };
 
       const response = await createUser(payload);
+      console.log(response);
+
       if (response.success) {
         setRows((prev) => [
           ...prev,
@@ -74,7 +77,7 @@ export default function EditUsers() {
             name: response.data.fullName,
             email: response.data.email,
             password: response.data.password,
-            status: roles,
+            status: false,
           },
         ]);
       }
@@ -99,7 +102,6 @@ export default function EditUsers() {
           status: user.isAdmin,
           email: user.email,
         }));
-        console.log(mappedUsers);
 
         setRows(mappedUsers);
         return users;
@@ -146,6 +148,7 @@ export default function EditUsers() {
 
   const processRowUpdate = async (newRow) => {
     const updatedRow = { ...newRow, isNew: false };
+    console.log(updatedRow);
 
     try {
       await editUser({

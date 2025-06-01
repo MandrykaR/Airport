@@ -34,7 +34,8 @@ const BoardAir = () => {
   useEffect(() => {
     if (!flights) return;
 
-    const selectedDate = moment.utc(queryDate, 'YYYY-MM-DD');
+    const rawDate = searchParams.get('date');
+    const selectedDate = rawDate ? moment.utc(rawDate, 'YYYY-MM-DD') : null;
     const searchLower = searchTerm.toLowerCase();
 
     const filteredFlights = flights.filter((flight) => {
@@ -50,21 +51,29 @@ const BoardAir = () => {
           ? flight.type === 'DEPARTURE'
           : flight.type === 'ARRIVAL';
 
-      const matchesDate =
-        (departureDate && departureDate.isSame(selectedDate, 'day')) ||
-        (arrivalDate && arrivalDate.isSame(selectedDate, 'day'));
+      const matchesDate = selectedDate
+        ? (departureDate && departureDate.isSame(selectedDate, 'day')) ||
+          (arrivalDate && arrivalDate.isSame(selectedDate, 'day'))
+        : true;
 
       const cityFilter = [flight.departureCity, flight.arrivalCity]
         .filter(Boolean)
         .map((c) => c.toLowerCase())
         .some((city) => city.includes(searchLower));
 
-      return matchesType && matchesDate && cityFilter;
+      const codeShareFilter = Array.isArray(flight.codeShare)
+        ? flight.codeShare
+            .map((code) => code.toLowerCase())
+            .some((code) => code.includes(searchLower))
+        : typeof flight.codeShare === 'string'
+        ? flight.codeShare.toLowerCase().includes(searchLower)
+        : false;
+
+      return matchesType && matchesDate && (cityFilter || codeShareFilter);
     });
 
     setFilteredFlights(filteredFlights);
   }, [flights, queryType, queryDate, searchTerm]);
-
   const handleSearchChange = (newSearchTerm) => {
     setSearchTerm(newSearchTerm);
 

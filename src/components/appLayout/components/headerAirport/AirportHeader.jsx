@@ -9,7 +9,7 @@ const links = [
 const AirportHeader = () => {
   return (
     <header className="header">
-      <a href="./" className="header__logo">
+      <a href="/" className="header__logo">
         <img src="/src/image/image-removebg-preview.png" />
       </a>
       <nav className="header__navigation">

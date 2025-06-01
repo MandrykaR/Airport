@@ -12,31 +12,15 @@ import {
 } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import { parsePostContent } from './utils/parsePostContent';
+import { popularDestinations } from './utils/popularDestinations';
 
 const LastNews = () => {
   const [posts, setPosts] = useState([]);
   const { getPosts } = useGetPosts();
   const navigate = useNavigate();
 
-  const [currentIndex, setCurrentIndex] = useState(0);
-  const itemsPerSlide = 3;
-
   const onShowMore = (postId) => {
     navigate(`/news/${postId}`);
-  };
-
-  const nextSlide = () => {
-    setCurrentIndex((prev) =>
-      prev + itemsPerSlide < posts.length ? prev + itemsPerSlide : 0
-    );
-  };
-
-  const prevSlide = () => {
-    setCurrentIndex((prev) =>
-      prev - itemsPerSlide >= 0
-        ? prev - itemsPerSlide
-        : posts.length - itemsPerSlide
-    );
   };
 
   useEffect(() => {
@@ -58,39 +42,48 @@ const LastNews = () => {
       <Typography gutterBottom variant="h1">
         NEWS
       </Typography>
-      <Box className="posts-slider">
-        <Button className="slider-arrow left" onClick={prevSlide}>
-          ‹
-        </Button>
+      <Typography gutterBottom variant="h4">
+        Explore the World: 2025 Hotspots
+      </Typography>
 
-        <Box className="posts-track">
-          {posts
-            .slice(currentIndex, currentIndex + itemsPerSlide)
-            .map((post) => (
+      <Box className="posts-slider" sx={{ overflow: 'hidden', width: '100%' }}>
+        <Box
+          className="posts-track"
+          sx={{
+            display: 'flex',
+            animation: 'posts 60s linear infinite',
+            width: `${popularDestinations.length * 2 * 320}px`,
+          }}
+        >
+          {[...popularDestinations, ...popularDestinations].map(
+            (destination, index) => (
               <Card
-                key={post.id}
-                sx={{ width: 300, boxShadow: 3, margin: '0 1rem' }}
+                key={`${destination.id}-${index}`}
+                sx={{
+                  width: 300,
+                  margin: '0 10px',
+                  flexShrink: 0,
+                  boxShadow: 3,
+                }}
               >
                 <CardMedia
-                  sx={{ height: 140, objectFit: 'cover' }}
-                  image={post.image}
-                  title={post.title}
+                  component="img"
+                  height="140"
+                  image={destination.image}
+                  title={destination.title}
                 />
                 <CardContent>
                   <Typography gutterBottom variant="h6">
-                    {post.title}
+                    {destination.title}
                   </Typography>
                   <Typography variant="body2" color="text.secondary">
-                    {post.description.slice(0, 100)}...
+                    {destination.description.slice(0, 100)}...
                   </Typography>
                 </CardContent>
               </Card>
-            ))}
+            )
+          )}
         </Box>
-
-        <Button className="slider-arrow right" onClick={nextSlide}>
-          ›
-        </Button>
       </Box>
 
       {posts.length > 0 ? (
