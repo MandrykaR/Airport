@@ -2,6 +2,25 @@ import axios from 'axios';
 import { useAuthToken } from '../../hooks/useAuthToken';
 export const API_URL = 'http://localhost:3005/';
 
+export const getPostsById = () => {
+  const token = useAuthToken();
+
+  const getPostById = async (id) => {
+    try {
+      const res = await axios.get(`${API_URL}/posts/${id}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      return res.data;
+    } catch (error) {
+      console.error('Error in receiving the post', error);
+    }
+  };
+
+  return { getPostById };
+};
+
 export const useGetPosts = () => {
   const token = useAuthToken();
 

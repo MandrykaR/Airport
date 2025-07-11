@@ -10,7 +10,7 @@ const AirportHeader = () => {
   return (
     <header className="header">
       <a href="/" className="header__logo">
-        <img src="/src/image/image-removebg-preview.png" />
+        <img src="/src/image/logo-air.png" />
       </a>
       <nav className="header__navigation">
         <ul className="header__links">

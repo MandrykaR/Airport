@@ -20,28 +20,32 @@
     width: 100%;
     padding: 20px 10px;
 
-    .MuiList-root {
-      display: flex;
-      flex-direction: column;
-      gap: 16px;
+    .MuiListItemText-root {
+      color: #000;
+    }
+
+    .MuiListItemIcon-root {
+      color: #312f2f;
     }
 
     .list-item-button {
+      height: 75px;
       border-radius: 8px;
-      padding: 12px 16px;
-      transition: background-color 0.3s ease;
-
-      &.Mui-selected {
-        background-color: #4caf50 !important;
-        color: white;
-
-        .MuiListItemIcon-root {
-          color: white;
-        }
-      }
 
       &:hover {
-        background-color: #c8e6c9;
+        background-color: #bdf0be;
+      }
+
+      &.active {
+        background-color: #4caf50;
+
+        .MuiListItemText-root {
+          color: #fff;
+        }
+
+        .MuiListItemIcon-root {
+          color: #ffffff;
+        }
       }
     }
   }

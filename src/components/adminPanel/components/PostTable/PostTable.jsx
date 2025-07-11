@@ -2,9 +2,14 @@ import React, { useState, useEffect, useRef, useMemo } from 'react';
 import { CKEditor } from '@ckeditor/ckeditor5-react';
 import { ClassicEditor } from 'ckeditor5';
 import getEditorConfig from './config/ckeditorConfig';
-import { useCreatePost } from '../../../../entities/postsGateways';
-import { Button, Typography } from '@mui/material';
+import {
+  getPostsById,
+  useCreatePost,
+  useUpdatePost,
+} from '../../../../entities/postsGateways';
+import { Alert, Button, Snackbar, Typography } from '@mui/material';
 import ModeEditRoundedIcon from '@mui/icons-material/ModeEditRounded';
+import { useParams } from 'react-router';
 
 import 'ckeditor5/ckeditor5.css';
 import './postTable.scss';
@@ -16,8 +21,27 @@ const PostTable = () => {
   const editorRef = useRef(null);
   const [isLayoutReady, setIsLayoutReady] = useState(false);
   const [editorInstance, setEditorInstance] = useState(null);
+  const [content, setContent] = useState('');
   const [title, setTitle] = useState('');
+  const [snackbar, setSnackbar] = useState({
+    open: false,
+    message: '',
+    severity: 'info',
+  });
+
   const { createPost } = useCreatePost();
+  const { getPostById } = getPostsById();
+  const { updatePost } = useUpdatePost();
+  let { id } = useParams();
+
+  useEffect(() => {
+    if (id) {
+      getPostById(id).then((post) => {
+        setTitle(post.data.title);
+        setContent(post.data.content);
+      });
+    }
+  }, [id]);
 
   useEffect(() => {
     setIsLayoutReady(true);
@@ -34,13 +58,35 @@ const PostTable = () => {
 
   const handleSave = async () => {
     try {
-      await createPost({
-        title,
-        content: editorInstance.getData() || '',
+      const content = editorInstance.getData() || '';
+      if (id) {
+        await updatePost(id, { title, content });
+      } else {
+        await createPost({
+          title,
+          content,
+        });
+      }
+
+      setSnackbar({
+        open: true,
+        message: 'Another good post, cool!',
+        severity: 'success',
       });
     } catch (error) {
-      console.error('error', error);
+      setSnackbar({
+        open: true,
+        message: 'You missed something',
+        severity: 'error',
+      });
     }
+
+    setTitle('');
+    setContent(' ');
+  };
+
+  const handleCloseSnackbar = () => {
+    setSnackbar({ ...snackbar, open: false });
   };
 
   return (
@@ -48,7 +94,7 @@ const PostTable = () => {
       <div className="box-name">
         <ModeEditRoundedIcon fontSize="large" color="action" />
         <Typography variant="h4" sx={{ fontWeight: 600 }}>
-          Create Post
+          {id ? 'Edit Post' : 'Create Post'}
         </Typography>
       </div>
       <input
@@ -67,6 +113,7 @@ const PostTable = () => {
               <CKEditor
                 editor={ClassicEditor}
                 config={editorConfig}
+                data={content}
                 onReady={(editor) => {
                   setEditorInstance(editor);
                 }}
@@ -80,8 +127,23 @@ const PostTable = () => {
             className="button-post"
             sx={{ mt: 2, fontSize: 15, fontWeight: 500 }}
           >
-            Send Post
+            {id ? 'Update Post' : 'Send Post'}
           </Button>
+
+          <Snackbar
+            open={snackbar.open}
+            autoHideDuration={3000}
+            onClose={handleCloseSnackbar}
+            anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
+          >
+            <Alert
+              onClose={handleCloseSnackbar}
+              severity={snackbar.severity}
+              sx={{ width: '100%' }}
+            >
+              {snackbar.message}
+            </Alert>
+          </Snackbar>
         </div>
       </div>
     </div>

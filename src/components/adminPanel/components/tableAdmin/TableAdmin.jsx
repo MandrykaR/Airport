@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import Box from '@mui/material/Box';
 import DeleteIcon from '@mui/icons-material/DeleteOutlined';
-import SaveIcon from '@mui/icons-material/Save';
 import CancelIcon from '@mui/icons-material/Close';
 import {
   DataGrid,
@@ -9,14 +8,12 @@ import {
   GridRowModes,
   GridRowEditStopReasons,
 } from '@mui/x-data-grid';
-import {
-  useGetPosts,
-  useDeletePost,
-  useUpdatePost,
-} from '../../../../entities/postsGateways';
+import { format } from 'date-fns';
+import { useGetPosts, useDeletePost } from '../../../../entities/postsGateways';
 import { Typography } from '@mui/material';
 import ListAltIcon from '@mui/icons-material/ListAlt';
 import { parsePostContent } from '../../../lastNews/utils/parsePostContent';
+import { useNavigate } from 'react-router-dom';
 
 import './tablePanel.scss';
 
@@ -41,7 +38,7 @@ const TablePostsAdmin = () => {
   const [rowModesModel, setRowModesModel] = useState({});
   const { getPosts } = useGetPosts();
   const { deletePosts } = useDeletePost();
-  const { updatePost } = useUpdatePost();
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchPosts = async () => {
@@ -50,13 +47,19 @@ const TablePostsAdmin = () => {
         const posts = data.data.posts || [];
         const rowPost = posts.map(parsePostContent);
 
-        const formattedRows = rowPost.map((post) => ({
-          id: post.id,
-          name: post.title,
-          postDate: new Date(post.createdAt),
-          description: post.description,
-          status: post.status || 'Published',
-        }));
+        const formattedRows = rowPost.map(
+          (post) => (
+            console.log(post),
+            {
+              id: post.id,
+              name: post.title,
+              postDate: post.postDate,
+              postDateUpdate: post.updateDatePost,
+              description: post.descriptionText,
+              status: post.status || 'Published',
+            }
+          )
+        );
 
         setRows(formattedRows);
       } catch (error) {}
@@ -67,31 +70,6 @@ const TablePostsAdmin = () => {
   const handleRowEditStop = (params, event) => {
     if (params.reason === GridRowEditStopReasons.rowFocusOut) {
       event.defaultMuiPrevented = true;
-    }
-  };
-
-  const processRowUpdate = async (newRow, oldRow) => {
-    const updatedPost = {
-      title: newRow.name || '',
-      content: newRow.description || '',
-    };
-
-    try {
-      const updated = await updatePost(newRow.id, updatedPost);
-      const updatedRow = {
-        ...newRow,
-        name: updated.data.title,
-        description: updated.data.content,
-      };
-
-      setRows((prevRows) =>
-        prevRows.map((row) => (row.id === newRow.id ? updatedRow : row))
-      );
-
-      return updatedRow;
-    } catch (error) {
-      console.error('Update error:', error);
-      return oldRow;
     }
   };
 
@@ -121,27 +99,34 @@ const TablePostsAdmin = () => {
   };
 
   const columns = [
-    { field: 'name', headerName: 'Name', width: 180, editable: true },
+    { field: 'name', headerName: 'Name', width: 180, editable: false },
     {
       field: 'postDate',
       headerName: 'Post Date',
-      type: 'date',
+      type: 'string',
       width: 180,
-      editable: true,
+      editable: false,
+    },
+    {
+      field: 'postDateUpdate',
+      headerName: 'Last Update',
+      type: 'string',
+      width: 180,
+      editable: false,
     },
     {
       field: 'status',
       headerName: 'Status',
       width: 220,
       editable: false,
-      valueOptions: 'Published',
+      valueOptions: ['Published'],
     },
     {
       field: 'description',
       headerName: 'Description',
       type: 'text',
       width: 220,
-      editable: true,
+      editable: false,
     },
     {
       field: 'actions',
@@ -155,17 +140,6 @@ const TablePostsAdmin = () => {
 
         if (isInEditMode) {
           return [
-            <GridActionsCellItem
-              icon={<SaveIcon />}
-              label="Save"
-              sx={{ color: 'primary.main' }}
-              onClick={() => {
-                setRowModesModel((prevModel) => ({
-                  ...prevModel,
-                  [id]: { mode: GridRowModes.View },
-                }));
-              }}
-            />,
             <GridActionsCellItem
               icon={<CancelIcon />}
               label="Cancel"
@@ -181,12 +155,7 @@ const TablePostsAdmin = () => {
             icon={<ListAltIcon />}
             label="Edit"
             className="textPrimary"
-            onClick={() =>
-              setRowModesModel((prevModel) => ({
-                ...prevModel,
-                [id]: { mode: GridRowModes.Edit, fieldToFocus: 'name' },
-              }))
-            }
+            onClick={() => navigate(`/admin/create-news/${id}`)}
             color="inherit"
           />,
           <GridActionsCellItem
@@ -227,7 +196,6 @@ const TablePostsAdmin = () => {
         rowModesModel={rowModesModel}
         onRowModesModelChange={handleRowModesModelChange}
         onRowEditStop={handleRowEditStop}
-        processRowUpdate={processRowUpdate}
         slots={{ toolbar: EditToolbar }}
         slotProps={{
           toolbar: { setRows, setRowModesModel },

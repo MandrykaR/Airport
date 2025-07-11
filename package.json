@@ -38,6 +38,7 @@
     "@reduxjs/toolkit": "^2.2.6",
     "axios": "^1.7.7",
     "ckeditor5": "^45.0.0",
+    "date-fns": "^4.1.0",
     "flowbite-react": "^0.11.7",
     "moment": "^2.30.1",
     "next": "^15.3.2",

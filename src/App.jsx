@@ -1,5 +1,10 @@
 import React from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  Navigate,
+} from 'react-router-dom';
 import BoardAir from './components/boardAir/BoardAir';
 import { Provider } from 'react-redux';
 import store from './redux/store';
@@ -12,6 +17,8 @@ import PrivateRoute from './routes/PrivateRoute.jsx';
 import LastNews from './components/lastNews/LastNews.jsx';
 import PageNews from './components/lastNews/components/pageNews/PageNews.jsx';
 import AppLayout from './components/appLayout/AppLayout.jsx';
+import EditUsers from './components/adminPanel/components/EditUser/EditUser.jsx';
+import TablePostsAdmin from './components/adminPanel/components/tableAdmin/TableAdmin.jsx';
 
 const App = () => {
   return (
@@ -28,7 +35,17 @@ const App = () => {
                   <AdminPanel type="admin" />
                 </PrivateRoute>
               }
-            />
+            >
+              <Route index element={<Navigate to="list-posts" replace />} />
+
+              <Route path="create-news" element={<PostTable />} />
+              <Route path="create-news/:id" element={<PostTable />} />
+
+              <Route path="edit-user" element={<EditUsers />} />
+              <Route path="profile-user" element={<ProfileUser />} />
+              <Route path="list-posts" element={<TablePostsAdmin />} />
+            </Route>
+
             <Route
               path="/posts"
               element={
