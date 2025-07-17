@@ -2,7 +2,8 @@
   background-color: #fff;
   border-radius: 60px 60px 0 0;
   overflow: hidden;
-  width: 1120px;
+  width: 100%;
+  max-width: 1200px;
   height: 480px;
   margin: 0 auto;
 }
@@ -46,6 +47,9 @@
       width: 30px;
       transition: filter 0.3s ease;
       filter: brightness(0%) invert(100%);
+
+      @media (min-width: 1120px) {
+      }
     }
 
     &:last-child::before {
@@ -113,4 +117,3 @@
     font-size: 30px;
   }
 }
-

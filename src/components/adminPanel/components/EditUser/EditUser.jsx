@@ -67,7 +67,6 @@ export default function EditUsers() {
       };
 
       const response = await createUser(payload);
-      console.log(response);
 
       if (response.success) {
         setRows((prev) => [

@@ -8,7 +8,6 @@ import {
   GridRowModes,
   GridRowEditStopReasons,
 } from '@mui/x-data-grid';
-import { format } from 'date-fns';
 import { useGetPosts, useDeletePost } from '../../../../entities/postsGateways';
 import { Typography } from '@mui/material';
 import ListAltIcon from '@mui/icons-material/ListAlt';
@@ -47,19 +46,14 @@ const TablePostsAdmin = () => {
         const posts = data.data.posts || [];
         const rowPost = posts.map(parsePostContent);
 
-        const formattedRows = rowPost.map(
-          (post) => (
-            console.log(post),
-            {
-              id: post.id,
-              name: post.title,
-              postDate: post.postDate,
-              postDateUpdate: post.updateDatePost,
-              description: post.descriptionText,
-              status: post.status || 'Published',
-            }
-          )
-        );
+        const formattedRows = rowPost.map((post) => ({
+          id: post.id,
+          name: post.title,
+          postDate: post.postDate,
+          postDateUpdate: post.updateDatePost,
+          description: post.descriptionText,
+          status: post.status || 'Published',
+        }));
 
         setRows(formattedRows);
       } catch (error) {}
